@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+LINE="$1"
+
+if [ "$LINE" = "FAIL" ]; then
+    echo 'ACK' > /tmp/.firefox_shm_check
+    exit 0
+fi
+
+# No match found.
+exit 1
+
+# vim: set ft=sh :

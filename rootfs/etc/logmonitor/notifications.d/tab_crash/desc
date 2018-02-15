@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv sh
+echo "A $APP_NAME tab crashed because of the lack of shared memory.  Size of shared memory needs to be increased.  See the documentation to find out how this can be done."
