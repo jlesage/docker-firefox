@@ -291,7 +291,7 @@ By default, the size is 64MB, which is not enough.  It is recommended to use a
 size of 2GB.  This value is arbitrary, but known to work well.  Setting the
 size of `/dev/shm` can be done via two method:
 
-  - By adding the `--shm-size=2g` parameter to the `docker run` command.  See
+  - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
     the [Usage](#usage) section for more details.
   - By using shared memory of the host, by mapping `/dev/shm` via the parameter
     `-v /dev/shm:/dev/shm` of the `docker run` command.
