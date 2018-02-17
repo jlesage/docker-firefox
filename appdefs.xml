@@ -1,0 +1,90 @@
+<!--
+Definitions for Firefox docker container.
+
+This file is used as data source to generate README.md and unRAID template files
+from Jinja2 templates.
+-->
+<defs>
+  <app>
+    <id>14</id>
+    <gui>True</gui>
+    <friendly_name>Firefox</friendly_name>
+    <name>{{ defs.app.friendly_name|lower|replace(' ', '-') }}</name>
+    <project>
+      <description>Mozilla Firefox is a free and open-source web browser developed by Mozilla Foundation and its subsidiary, Mozilla Corporation.</description>
+      <url>https://www.mozilla.org/en-US/firefox/</url>
+    </project>
+    <unraid>
+      <support_url>https://forums.lime-technology.com/topic/69440-support-firefox/</support_url>
+      <category>Tools:</category>
+    </unraid>
+    <container>
+      <rough_download_size>150MB</rough_download_size>
+      <unsupported_volume>/storage</unsupported_volume>
+    </container>
+    <!-- Extra stuff to be added to the documentation. -->
+    <documentation>
+      <section>
+        <title level="2">Increasing Shared Memory Size</title>
+        <content>
+To prevent crashes from happening when running {{ defs.app.friendly_name }}
+inside a Docker container, the size of the shared memory located at `/dev/shm`
+must be increased.  The issue is documented [here].
+
+By default, the size is 64MB, which is not enough.  It is recommended to use a
+size of 2GB.  This value is arbitrary, but known to work well.  Setting the
+size of `/dev/shm` can be done via two method:
+
+  - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
+    the [Usage](#usage) section for more details.
+  - By using shared memory of the host, by mapping `/dev/shm` via the parameter
+    `-v /dev/shm:/dev/shm` of the `docker run` command.
+        </content>
+      </section>
+      <section>
+        <title level="2">Troubleshooting</title>
+        <content/>
+      </section>
+      <section>
+        <title level="3">Crashes</title>
+        <content>
+If {{ defs.app.friendly_name }} is crashing frequently, make sure the size of
+the shared memory located at `/dev/shm` has been increased.  See
+[Increasing Shared Memory Size](#increasing-shared-memory-size) section for more
+details.
+        </content>
+      </section>
+      <link>
+        <name>here</name>
+        <url>https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10</url>
+      </link>
+    </documentation>
+    <!-- Changelog of the application. -->
+    <history>
+      <release>
+        <version>1.0.0</version>
+        <date>2018-02-16</date>
+        <change>Initial release.</change>
+      </release>
+    </history>
+  </app>
+  <container>
+    <!-- Environment variables -->
+    <environment_variables/>
+    <!-- Volumes -->
+    <volumes/>
+    <!-- Network ports -->
+    <ports/>
+    <!-- Devices -->
+    <devices/>
+    <!-- Extra parameters -->
+    <extra_params>
+      <extra_param>
+        <name>shm-size</name>
+        <value>2g</value>
+        <description>Set the size of `/dev/shm` to `VALUE`.  The format of `VALUE` is `&lt;number&gt;&lt;unit&gt;`, where `number` must be greater than `0` and `unit` can be `b` (bytes), `k` (kilobytes), `m` (megabytes), or `g` (gigabytes).  **NOTE**: To avoid crashes, it is recommended to set this value to `2g`.</description>
+        <include_in_quick_start>true</include_in_quick_start>
+      </extra_param>
+    </extra_params>
+  </container>
+</defs>
