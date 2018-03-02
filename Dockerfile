@@ -8,7 +8,7 @@
 FROM jlesage/baseimage-gui:alpine-3.7-v3.3.4
 
 # Define software versions.
-ARG FIREFOX_VERSION=58.0.1-r1
+ARG FIREFOX_VERSION=58.0.1-r2
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
@@ -19,7 +19,12 @@ WORKDIR /tmp
 
 # Install Firefox.
 RUN \
-    add-pkg firefox=${FIREFOX_VERSION} --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing && \
+    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+        icu-libs \
+        && \
+    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+        firefox=${FIREFOX_VERSION} \
+        && \
     add-pkg \
         desktop-file-utils \
         adwaita-icon-theme \
