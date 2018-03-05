@@ -30,12 +30,12 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
       * [Security](#security)
          * [Certificates](#certificates)
          * [VNC Password](#vnc-password)
-      * [Increasing Shared Memory Size](#increasing-shared-memory-size)
-      * [Troubleshooting](#troubleshooting)
-         * [Crashes](#crashes)
       * [Reverse Proxy](#reverse-proxy)
          * [Routing Based on Hostname](#routing-based-on-hostname)
          * [Routing Based on URL Path](#routing-based-on-url-path)
+      * [Increasing Shared Memory Size](#increasing-shared-memory-size)
+      * [Troubleshooting](#troubleshooting)
+         * [Crashes](#crashes)
       * [Support or Contact](#support-or-contact)
 
 ## Quick Start
@@ -281,33 +281,6 @@ the Remote Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143) (see
 section [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)).  Any
 characters beyhond the limit are ignored.
 
-## Increasing Shared Memory Size
-
-To prevent crashes from happening when running Firefox
-inside a Docker container, the size of the shared memory located at `/dev/shm`
-must be increased.  The issue is documented [here].
-
-By default, the size is 64MB, which is not enough.  It is recommended to use a
-size of 2GB.  This value is arbitrary, but known to work well.  Setting the
-size of `/dev/shm` can be done via two method:
-
-  - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
-    the [Usage](#usage) section for more details.
-  - By using shared memory of the host, by mapping `/dev/shm` via the parameter
-    `-v /dev/shm:/dev/shm` of the `docker run` command.
-
-## Troubleshooting
-
-### Crashes
-
-If Firefox is crashing frequently, make sure the size of
-the shared memory located at `/dev/shm` has been increased.  See
-[Increasing Shared Memory Size](#increasing-shared-memory-size) section for more
-details.
-
-[TimeZone]: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-[here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
-
 ## Reverse Proxy
 
 The following sections contains NGINX configuration that need to be added in
@@ -404,6 +377,33 @@ server {
 }
 
 ```
+
+## Increasing Shared Memory Size
+
+To prevent crashes from happening when running Firefox
+inside a Docker container, the size of the shared memory located at `/dev/shm`
+must be increased.  The issue is documented [here].
+
+By default, the size is 64MB, which is not enough.  It is recommended to use a
+size of 2GB.  This value is arbitrary, but known to work well.  Setting the
+size of `/dev/shm` can be done via two method:
+
+  - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
+    the [Usage](#usage) section for more details.
+  - By using shared memory of the host, by mapping `/dev/shm` via the parameter
+    `-v /dev/shm:/dev/shm` of the `docker run` command.
+
+## Troubleshooting
+
+### Crashes
+
+If Firefox is crashing frequently, make sure the size of
+the shared memory located at `/dev/shm` has been increased.  See
+[Increasing Shared Memory Size](#increasing-shared-memory-size) section for more
+details.
+
+[TimeZone]: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+[here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
 
 ## Support or Contact
 
