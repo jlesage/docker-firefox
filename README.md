@@ -25,6 +25,8 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
          * [Changing Parameters of a Running Container](#changing-parameters-of-a-running-container)
       * [Docker Compose File](#docker-compose-file)
       * [Docker Image Update](#docker-image-update)
+         * [Synology](#synology)
+         * [unRAID](#unraid)
       * [User/Group IDs](#usergroup-ids)
       * [Accessing the GUI](#accessing-the-gui)
       * [Security](#security)
@@ -186,6 +188,32 @@ docker stop firefox
 docker rm firefox
 ```
   4. Start the container using the `docker run` command.
+
+### Synology
+
+For owners of a Synology NAS, the following steps can be use to update a
+container image.
+
+  1.  Open the *Docker* application.
+  2.  Click on *Registry* in the left pane.
+  3.  In the search bar, type the name of the container (`jlesage/docker-firefox`).
+  4.  Select the image, click *Download* and then choose the `latest` tag.
+  5.  Wait for the download to complete.  A  notification will appear once done.
+  6.  Click on *Container* in the left pane.
+  7.  Select your Firefox container.
+  8.  Stop it by clicking *Action*->*Stop*.
+  9.  Clear the container by clicking *Action*->*Clear*.  This removes the
+      container while keeping its configuration.
+  10. Start the container again by clicking *Action*->*Start*. **NOTE**:  The
+      container may temporarily disappear from the list while it is re-created.
+
+### unRAID
+
+For unRAID, a container image can be updated by following these steps:
+
+  1. Select the *Docker* tab.
+  2. Click the *Check for Updates* button at the bottom of the page.
+  3. Click the *update ready* link of the container to be updated.
 
 ## User/Group IDs
 
