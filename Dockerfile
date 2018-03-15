@@ -28,7 +28,9 @@ RUN \
     add-pkg \
         desktop-file-utils \
         adwaita-icon-theme \
-        ttf-dejavu
+        ttf-dejavu \
+        # The following package is used to send key presses to the X process.
+        xdotool
 
 # Set default settings.
 RUN \

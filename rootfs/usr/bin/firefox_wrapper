@@ -1,0 +1,60 @@
+#!/bin/sh
+
+#
+# This small wrapper is used to gracefully terminate Firefox.  It prevents
+# the application to receive termination signals directly.  Instead, the wrapper
+# traps signals and send CTRL+q key presses to Firefox.
+#
+
+FF_PID=0
+
+# Gracefully terminate Firefox.  This function is called when this script
+# receives a termination signal (SIGKILL, SIGINT or SIGQUIT).
+kill_firefox() {
+    # Gracefully close Firefox.
+    echo "Terminating Firefox..."
+    xdotool key "Escape"
+    xdotool key "ctrl+q"
+
+    # And wait for its termination.
+    if [ "$FF_PID" -ne 0 ]; then
+        wait $FF_PID
+        exit $?
+    fi
+}
+trap 'kill_firefox' TERM INT QUIT
+
+# This function is called when this script exits.  It makes sure that Firefox is
+# fully closed by waiting for all its processes to terminate.
+exit_wrapper() {
+    echo "Waiting for Firefox to completely terminate..."
+    TIMEOUT=10
+    while firefox_running && [ "$TIMEOUT" -gt 0 ]; do
+        TIMEOUT="$(expr "$TIMEOUT" - 1)"
+        sleep 1
+    done
+
+    if [ "$TIMEOUT" -gt 0 ]; then
+        echo "Firefox terminated."
+    else
+        echo "WARNING: Firefox still not terminated."
+    fi
+}
+trap 'exit_wrapper' EXIT
+
+firefox_running() {
+    ps | grep -v grep | grep -q '/usr/lib/firefox'
+}
+
+# Make sure to terminate any existing instance.
+if firefox_running; then
+    kill_firefox
+fi
+
+# Start Firefox in background.
+/usr/bin/firefox "$@" &
+
+# And wait for its termination.
+FF_PID=$!
+wait $FF_PID
+exit $?
