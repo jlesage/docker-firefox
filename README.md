@@ -271,6 +271,8 @@ HTTPs.
 When using a VNC client, the VNC connection is performed over SSL.  Note that
 few VNC clients support this method.  [SSVNC] is one of them.
 
+[SSVNC]: http://www.karlrunge.com/x11vnc/ssvnc.html
+
 ### Certificates
 
 Here are the certificate files needed by the container.  By default, when they
