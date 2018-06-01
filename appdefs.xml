@@ -62,6 +62,11 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.1.0</version>
+        <date>2018-05-31</date>
+        <change>Upgraded Firefox to version 60.0.1-r0.</change>
+      </release>
+      <release>
         <version>1.0.2</version>
         <date>2018-03-15</date>
         <change>Fixed issue where Firefox would not gracefully terminate.</change>
