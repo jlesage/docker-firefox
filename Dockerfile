@@ -8,7 +8,7 @@
 FROM jlesage/baseimage-gui:alpine-3.7-v3.3.4
 
 # Define software versions.
-ARG FIREFOX_VERSION=58.0.1-r2
+ARG FIREFOX_VERSION=60.0.1-r0
 ARG JSONLZ4_VERSION=c4305b8
 ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
@@ -24,11 +24,11 @@ WORKDIR /tmp
 # Install Firefox.
 RUN \
     add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-        icu-libs \
-        && \
-    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-        firefox=${FIREFOX_VERSION} \
-        && \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            --upgrade firefox=${FIREFOX_VERSION}
+
+# Install extra packages.
+RUN \
     add-pkg \
         desktop-file-utils \
         adwaita-icon-theme \
@@ -38,7 +38,7 @@ RUN \
 
 # Set default settings.
 RUN \
-    CFG_FILE="$(ls /usr/lib/firefox-*/browser/defaults/preferences/firefox-branding.js)" && \
+    CFG_FILE="$(ls /usr/lib/firefox/browser/defaults/preferences/firefox-branding.js)" && \
     echo '' >> "$CFG_FILE" && \
     echo '// Default download directory.' >> "$CFG_FILE" && \
     echo 'pref("browser.download.dir", "/config/downloads");' >> "$CFG_FILE" && \
