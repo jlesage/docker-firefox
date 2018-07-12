@@ -62,6 +62,12 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.2.0</version>
+        <date>2018-07-12</date>
+        <change>Now using baseimage v3.4.0, which is based on Alpine Linux 3.8.</change>
+        <change>Upgraded Firefox to version 61.0.1-r0.</change>
+      </release>
+      <release>
         <version>1.1.0</version>
         <date>2018-05-31</date>
         <change>Upgraded Firefox to version 60.0.1-r0.</change>
