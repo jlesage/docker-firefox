@@ -59,8 +59,7 @@ docker run -d \
 Where:
   - `/docker/appdata/firefox`: This is where the application stores its configuration, log and any files needing persistency.
 
-Browse to `http://your-host-ip:5800` to access the Firefox GUI.  Files from
-the host appear under the `/storage` folder in the container.
+Browse to `http://your-host-ip:5800` to access the Firefox GUI.
 
 ## Usage
 
