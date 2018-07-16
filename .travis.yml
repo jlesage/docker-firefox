@@ -9,10 +9,6 @@ language: generic
 services:
   - docker
 
-before_script:
-  - echo "Validating Dockerfile..."
-  - docker run --rm -v "$(pwd)/Dockerfile:/Dockerfile:ro" redcoolbeans/dockerlint:0.2.0
-
 script:
   - echo "Starting build of Docker image..."
   - docker build --no-cache --pull -t $TRAVIS_REPO_SLUG:$TRAVIS_JOB_ID .
