@@ -41,6 +41,14 @@ size of `/dev/shm` can be done via two method:
     `-v /dev/shm:/dev/shm` of the `docker run` command.
         </content>
       </section>
+    <section>
+      <title level="2">Sound Support</title>
+      <content>
+For {{ defs.app.friendly_name }} to be able to use the audio device available on
+the host, `/dev/snd` must be exposed to the container by adding the
+`--device /dev/snd` parameter to the `docker run` command.
+      </content>
+    </section>
       <section>
         <title level="2">Troubleshooting</title>
         <content/>
@@ -100,7 +108,13 @@ details.
     <!-- Network ports -->
     <ports/>
     <!-- Devices -->
-    <devices/>
+    <devices>
+      <device>
+        <path>/dev/snd</path>
+        <description>Optional Linux device to expose to have sound.</description>
+        <include_in_quick_start>false</include_in_quick_start>
+      </device>
+    </devices>
     <!-- Extra parameters -->
     <extra_params>
       <extra_param>

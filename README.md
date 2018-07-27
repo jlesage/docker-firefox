@@ -37,6 +37,7 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
          * [Routing Based on Hostname](#routing-based-on-hostname)
          * [Routing Based on URL Path](#routing-based-on-url-path)
       * [Increasing Shared Memory Size](#increasing-shared-memory-size)
+      * [Sound Support](#sound-support)
       * [Troubleshooting](#troubleshooting)
          * [Crashes](#crashes)
       * [Support or Contact](#support-or-contact)
@@ -433,6 +434,12 @@ size of `/dev/shm` can be done via two method:
     the [Usage](#usage) section for more details.
   - By using shared memory of the host, by mapping `/dev/shm` via the parameter
     `-v /dev/shm:/dev/shm` of the `docker run` command.
+
+## Sound Support
+
+For Firefox to be able to use the audio device available on
+the host, `/dev/snd` must be exposed to the container by adding the
+`--device /dev/snd` parameter to the `docker run` command.
 
 ## Troubleshooting
 
