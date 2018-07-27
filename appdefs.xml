@@ -70,6 +70,12 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.3.0</version>
+        <date>2018-07-27</date>
+        <change>Added support for more playable video formats.</change>
+        <change>Added support for sound in Firefox.</change>
+      </release>
+      <release>
         <version>1.2.0</version>
         <date>2018-07-12</date>
         <change>Now using baseimage v3.4.0, which is based on Alpine Linux 3.8.</change>
