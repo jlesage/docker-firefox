@@ -12,8 +12,10 @@ mkdir -p /config/downloads
 mkdir -p /config/log/firefox
 
 # Generate machine id.
-log "generating machine-id..."
-cat /proc/sys/kernel/random/uuid | tr -d '-' > /etc/machine-id
+if [ ! -f /etc/machine-id ]; then
+    log "generating machine-id..."
+    cat /proc/sys/kernel/random/uuid | tr -d '-' > /etc/machine-id
+fi
 
 # Verify the size of /dev/shm.
 SHM_SIZE_MB="$(df -m /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f2)"
