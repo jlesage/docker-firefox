@@ -15,7 +15,7 @@ from Jinja2 templates.
       <url>https://www.mozilla.org/en-US/firefox/</url>
     </project>
     <unraid>
-      <support_url>https://forums.lime-technology.com/topic/69440-support-firefox/</support_url>
+      <support_url>https://forums.unraid.net/topic/69440-support-firefox/</support_url>
       <category>Tools:</category>
     </unraid>
     <container>
