@@ -70,6 +70,12 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.3.1</version>
+        <date>2018-09-18</date>
+        <change>Now using baseimage v3.5.1, which brings the following changes:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+      </release>
+      <release>
         <version>1.3.0</version>
         <date>2018-07-27</date>
         <change>Added support for more playable video formats.</change>
