@@ -7,7 +7,7 @@ from Jinja2 templates.
 <defs>
   <app>
     <id>14</id>
-    <gui>True</gui>
+    <gui_type>x11</gui_type>
     <friendly_name>Firefox</friendly_name>
     <name>{{ defs.app.friendly_name|lower|replace(' ', '-') }}</name>
     <project>
