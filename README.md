@@ -39,6 +39,7 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
       * [Shell Access](#shell-access)
       * [Increasing Shared Memory Size](#increasing-shared-memory-size)
       * [Sound Support](#sound-support)
+      * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
       * [Troubleshooting](#troubleshooting)
          * [Crashes](#crashes)
       * [Support or Contact](#support-or-contact)
@@ -459,6 +460,42 @@ size of `/dev/shm` can be done via two method:
 For Firefox to be able to use the audio device available on
 the host, `/dev/snd` must be exposed to the container by adding the
 `--device /dev/snd` parameter to the `docker run` command.
+
+## Setting Firefox Preferences Via Environment Variables
+
+Firefox preferences can be set via environment variables
+passed to the containter.  During the startup, a script process all these
+variables and modify the preference file accordingly.
+
+The name of the environment variable must start with `FF_PREF_`, followed by a
+string of your choice.  For example, `FF_PREF_MY_PREF` is a valid name.
+
+The content of the variable should be in the format `NAME=VAL`, where `NAME` is
+the name of the preference (as found in the `about:config` page) and `VAL` is
+its value.  A value can be one of the following type:
+  - string
+  - integer
+  - boolean
+It is important to note that a value of type `string` should be surrounded by
+double quotes.  Other types don't need them.
+
+For example, to set the `network.proxy.http` preference, one would pass the
+environment variable to the container by adding the following argument to the
+`docker run` command:
+
+```
+-e "FF_PREF_HTTP_PROXY=network.proxy.http=\"proxy.example.com\""
+```
+
+If a preference needs to be *removed*, its value should be set to `UNSET`.  For
+example:
+
+```
+-e "FF_PREF_HTTP_PROXY=network.proxy.http=UNSET
+```
+
+**NOTE**: This is an advanced usage and it is recommended to set preferences
+via Firefox directly.
 
 ## Troubleshooting
 
