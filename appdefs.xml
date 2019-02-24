@@ -80,7 +80,7 @@ If a preference needs to be *removed*, its value should be set to `UNSET`.  For
 example:
 
 ```
--e "FF_PREF_HTTP_PROXY=network.proxy.http=UNSET
+-e "FF_PREF_HTTP_PROXY=network.proxy.http=UNSET"
 ```
 
 **NOTE**: This is an advanced usage and it is recommended to set preferences
