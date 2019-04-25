@@ -5,7 +5,7 @@
 #
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.9-v3.5.1
+FROM jlesage/baseimage-gui:alpine-3.9-v3.5.2
 
 # Define software versions.
 ARG FIREFOX_VERSION=62.0.3-r4
