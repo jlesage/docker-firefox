@@ -108,6 +108,16 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.4.1</version>
+        <date>2019-04-24</date>
+        <change>Upgraded Firefox to version 62.0.3-r4.</change>
+        <change>Now using baseimage v3.5.2, which brings the following changes:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+        <change level="2">Fixed issue where the container could have a zombie process.</change>
+        <change level="2">Fixed issue where the password would not be submitted when pressing the enter key in the password modal.</change>
+        <change level="2">Use relative path for favicon ressources to be more friendly with reverse proxy senarios.</change>
+      </release>
+      <release>
         <version>1.4.0</version>
         <date>2019-02-24</date>
         <change>Upgraded Firefox to version 62.0.3-r2.</change>
