@@ -108,6 +108,12 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.5.0</version>
+        <date>2019-05-09</date>
+        <change>Upgraded Firefox to version 66.0.4-r0.</change>
+        <change>Print the Firefox version during the container startup.</change>
+      </release>
+      <release>
         <version>1.4.1</version>
         <date>2019-04-24</date>
         <change>Upgraded Firefox to version 62.0.3-r4.</change>
