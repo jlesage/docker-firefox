@@ -1,7 +1,7 @@
 # Docker container for Firefox
 [![Docker Automated build](https://img.shields.io/docker/automated/jlesage/firefox.svg)](https://hub.docker.com/r/jlesage/firefox/) [![Docker Image](https://images.microbadger.com/badges/image/jlesage/firefox.svg)](http://microbadger.com/#/images/jlesage/firefox) [![Build Status](https://travis-ci.org/jlesage/docker-firefox.svg?branch=master)](https://travis-ci.org/jlesage/docker-firefox) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg)](https://github.com/jlesage/docker-firefox/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
 
-This is a Docker container for Firefox.
+This is a Docker container for [Firefox](https://www.mozilla.org/en-US/firefox/).
 
 The GUI of the application is accessed through a modern web browser (no installation or configuration needed on client side) or via any VNC client.
 
