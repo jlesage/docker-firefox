@@ -2,6 +2,7 @@
 # Drone pipeline to build Docker image.
 #
 
+---
 kind: pipeline
 type: docker
 name: default
