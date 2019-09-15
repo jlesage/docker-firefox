@@ -4,6 +4,8 @@
 # https://github.com/jlesage/docker-firefox
 #
 
+ARG DOCKER_IMAGE_VERSION=unknown
+
 # Pull base image.
 FROM jlesage/baseimage-gui:alpine-3.9-v3.5.2
 
@@ -119,6 +121,6 @@ VOLUME ["/config"]
 LABEL \
       org.label-schema.name="firefox" \
       org.label-schema.description="Docker container for Firefox" \
-      org.label-schema.version="unknown" \
+      org.label-schema.version="$DOCKER_IMAGE_VERSION" \
       org.label-schema.vcs-url="https://github.com/jlesage/docker-firefox" \
       org.label-schema.schema-version="1.0"
