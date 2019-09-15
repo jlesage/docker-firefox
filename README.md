@@ -1,5 +1,5 @@
 # Docker container for Firefox
-[![Docker Image Size](https://img.shields.io/microbadger/image-size/jlesage/firefox)](http://microbadger.com/#/images/jlesage/firefox) [![Build Status](https://travis-ci.org/jlesage/docker-firefox.svg?branch=master)](https://travis-ci.org/jlesage/docker-firefox) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg)](https://github.com/jlesage/docker-firefox/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
+[![Docker Image Size](https://img.shields.io/microbadger/image-size/jlesage/firefox)](http://microbadger.com/#/images/jlesage/firefox) [![Build Status](https://drone.le-sage.com/api/badges/jlesage/docker-firefox/status.svg)](https://drone.le-sage.com/jlesage/docker-firefox) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg)](https://github.com/jlesage/docker-firefox/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
 
 This is a Docker container for [Firefox](https://www.mozilla.org/en-US/firefox/).
 
