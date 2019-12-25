@@ -108,6 +108,15 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.8.0</version>
+        <date>2019-12-25</date>
+        <change>Upgraded Firefox to version 71.0-r0.</change>
+        <change>Now using baseimage v3.5.3, which brings the following changes:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+        <change level="2">Make sure the tzdata is installed.</change>
+        <change>Use baseimage based on Alpine Linux 3.10.</change>
+      </release>
+      <release>
         <version>1.7.1</version>
         <date>2019-08-26</date>
         <change>Upgraded Firefox to version 68.0.2-r0.</change>
