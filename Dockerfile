@@ -11,7 +11,7 @@ FROM jlesage/baseimage-gui:alpine-3.10-v3.5.3
 ARG DOCKER_IMAGE_VERSION=unknown
 
 # Define software versions.
-ARG FIREFOX_VERSION=72.0.2-r0
+ARG FIREFOX_VERSION=74.0-r0
 ARG JSONLZ4_VERSION=c4305b8
 ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
@@ -50,7 +50,7 @@ RUN \
 # Install Firefox.
 RUN \
     add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
             --upgrade firefox=${FIREFOX_VERSION}
 
 # Install extra packages.
