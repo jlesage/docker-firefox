@@ -108,6 +108,11 @@ details.
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.10.0</version>
+        <date>2020-03-15</date>
+        <change>Upgraded Firefox to version 74.0-r0.</change>
+      </release>
+      <release>
         <version>1.9.1</version>
         <date>2020-02-10</date>
         <change>Upgraded Firefox to version 72.0.2-r0.</change>
