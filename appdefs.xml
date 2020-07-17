@@ -53,7 +53,7 @@ the host, `/dev/snd` must be exposed to the container by adding the
         <title level="2">Setting {{ defs.app.friendly_name }} Preferences Via Environment Variables</title>
         <content>
 {{ defs.app.friendly_name }} preferences can be set via environment variables
-passed to the containter.  During the startup, a script process all these
+passed to the container.  During the startup, a script process all these
 variables and modify the preference file accordingly.
 
 The name of the environment variable must start with `FF_PREF_`, followed by a
@@ -61,10 +61,11 @@ string of your choice.  For example, `FF_PREF_MY_PREF` is a valid name.
 
 The content of the variable should be in the format `NAME=VAL`, where `NAME` is
 the name of the preference (as found in the `about:config` page) and `VAL` is
-its value.  A value can be one of the following type:
+its value.  A value can be one of the following types:
   - string
   - integer
   - boolean
+
 It is important to note that a value of type `string` should be surrounded by
 double quotes.  Other types don't need them.
 
