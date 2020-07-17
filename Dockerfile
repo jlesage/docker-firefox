@@ -61,7 +61,9 @@ RUN \
         ttf-dejavu \
         ffmpeg-libs \
         # The following package is used to send key presses to the X process.
-        xdotool
+        xdotool \
+        # for audio support in WSL
+        pulseaudio pulseaudio-alsa
 
 # Set default settings.
 RUN \
