@@ -20,9 +20,9 @@ fi
 # Verify the size of /dev/shm.
 SHM_SIZE_MB="$(df -m /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f2)"
 if [ "$SHM_SIZE_MB" -eq 64 ]; then
-   echo 'FAIL' > /tmp/.firefox_shm_check
+   echo 'SHM_CHECK_FAIL' > /tmp/.firefox_shm_check
 else
-   echo 'PASS' > /tmp/.firefox_shm_check
+   echo 'SHM_CHECK_PASS' > /tmp/.firefox_shm_check
 fi
 
 if /usr/bin/membarrier_check 2>/dev/null; then
