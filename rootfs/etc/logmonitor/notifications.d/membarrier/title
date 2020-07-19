@@ -1,0 +1,2 @@
+#!/usr/bin/with-contenv sh
+echo "$APP_NAME requires the membarrier system call."

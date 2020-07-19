@@ -4,6 +4,14 @@
 # https://github.com/jlesage/docker-firefox
 #
 
+# Build the membarrier check tool.
+FROM alpine:3.12
+WORKDIR /tmp
+COPY membarrier_check.c .
+RUN apk --no-cache add build-base linux-headers
+RUN gcc -static -o membarrier_check membarrier_check.c
+RUN strip membarrier_check
+
 # Pull base image.
 FROM jlesage/baseimage-gui:alpine-3.10-v3.5.3
 
@@ -93,7 +101,7 @@ RUN \
 RUN \
     add-pkg yad && \
     sed-patch 's|LOG_FILES=|LOG_FILES=/config/log/firefox/error.log|' /etc/logmonitor/logmonitor.conf && \
-    sed-patch 's|STATUS_FILES=|STATUS_FILES=/tmp/.firefox_shm_check|' /etc/logmonitor/logmonitor.conf
+    sed-patch 's|STATUS_FILES=|STATUS_FILES=/tmp/.firefox_shm_check,/tmp/.firefox_membarrier_check|' /etc/logmonitor/logmonitor.conf
 
 # Adjust the openbox config.
 RUN \
@@ -111,6 +119,7 @@ RUN \
 
 # Add files.
 COPY rootfs/ /
+COPY --from=0 /tmp/membarrier_check /usr/bin/
 
 # Set environment variables.
 ENV APP_NAME="Firefox"

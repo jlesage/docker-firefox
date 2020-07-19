@@ -41,14 +41,37 @@ size of `/dev/shm` can be done via two method:
     `-v /dev/shm:/dev/shm` of the `docker run` command.
         </content>
       </section>
-    <section>
-      <title level="2">Sound Support</title>
-      <content>
+      <section>
+        <title level="2">Allowing the membarrier System Call</title>
+        <content>
+To properly work, recent versions of {{ defs.app.friendly_name }} need the
+`membarrier` system call.  Without it, tabs would frequently crash.
+
+Docker uses [seccomp profile] to restrict system calls available to the
+container.  Before Docker version `20.03.0`, the `membarrier` system call was
+not allowed in the default profile.  If you run a such version, you can use one
+of the following solutions, from the most to the least secure, to provide the
+container permission to use this sytem call:
+
+  1. Run the container with a custom seccomp profile allowing the `membarrier`
+     system call.  The [latest official seccomp profile] can be used.  Download
+     the file and then add the following parameter when creating the container:
+     `--security-opt seccomp=/path/to/seccomp_profile.json`.
+  2. Run the container without the default seccomp profile (thus allowing all
+     system calls). Use the following parameter when creating the container:
+     `--security-opt seccomp=unconfined`.
+  3. Run the container in privileged mode.  This effectively disables usage of
+     seccomp.  Add the `--privileged` parameter when creating the container.
+        </content>
+      </section>
+      <section>
+        <title level="2">Sound Support</title>
+          <content>
 For {{ defs.app.friendly_name }} to be able to use the audio device available on
 the host, `/dev/snd` must be exposed to the container by adding the
 `--device /dev/snd` parameter to the `docker run` command.
-      </content>
-    </section>
+          </content>
+      </section>
       <section>
         <title level="2">Setting {{ defs.app.friendly_name }} Preferences Via Environment Variables</title>
         <content>
@@ -95,15 +118,26 @@ via {{ defs.app.friendly_name }} directly.
       <section>
         <title level="3">Crashes</title>
         <content>
-If {{ defs.app.friendly_name }} is crashing frequently, make sure the size of
-the shared memory located at `/dev/shm` has been increased.  See
-[Increasing Shared Memory Size](#increasing-shared-memory-size) section for more
-details.
+If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
+  - The size of the shared memory located at `/dev/shm` has been increased.  See
+    the [Increasing Shared Memory Size](#increasing-shared-memory-size) section
+    for more details.
+  - The `membarrier` system call is not blocked by Docker.  See the
+    [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
+    for more details.
         </content>
       </section>
       <link>
         <name>here</name>
         <url>https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10</url>
+      </link>
+      <link>
+        <name>seccomp profile</name>
+        <url>https://docs.docker.com/engine/security/seccomp/</url>
+      </link>
+      <link>
+        <name>latest official seccomp profile</name>
+        <url>https://github.com/moby/moby/blob/master/profiles/seccomp/default.json</url>
       </link>
     </documentation>
     <!-- Changelog of the application. -->

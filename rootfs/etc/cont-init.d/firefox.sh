@@ -25,6 +25,12 @@ else
    echo 'PASS' > /tmp/.firefox_shm_check
 fi
 
+if /usr/bin/membarrier_check 2>/dev/null; then
+   echo 'MEMBARRIER_CHECK_PASS' > /tmp/.firefox_membarrier_check
+else
+   echo 'MEMBARRIER_CHECK_FAIL' > /tmp/.firefox_membarrier_check
+fi
+
 # Clean/optimize Firefox databases.
 #if [ -d /config/.mozilla/firefox ] && [ -d /config/profile ]; then
 #    [ -f /config/.mozilla/firefox/profiles.ini ] || cp /defaults/profiles.ini /config/.mozilla/firefox/

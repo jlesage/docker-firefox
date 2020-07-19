@@ -38,6 +38,7 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
          * [Routing Based on URL Path](#routing-based-on-url-path)
       * [Shell Access](#shell-access)
       * [Increasing Shared Memory Size](#increasing-shared-memory-size)
+      * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
       * [Sound Support](#sound-support)
       * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
       * [Troubleshooting](#troubleshooting)
@@ -456,6 +457,27 @@ size of `/dev/shm` can be done via two method:
   - By using shared memory of the host, by mapping `/dev/shm` via the parameter
     `-v /dev/shm:/dev/shm` of the `docker run` command.
 
+## Allowing the membarrier System Call
+
+To properly work, recent versions of Firefox need the
+`membarrier` system call.  Without it, tabs would frequently crash.
+
+Docker uses [seccomp profile] to restrict system calls available to the
+container.  Before Docker version `20.03.0`, the `membarrier` system call was
+not allowed in the default profile.  If you run a such version, you can use one
+of the following solutions, from the most to the least secure, to provide the
+container permission to use this sytem call:
+
+  1. Run the container with a custom seccomp profile allowing the `membarrier`
+     system call.  The [latest official seccomp profile] can be used.  Download
+     the file and then add the following parameter when creating the container:
+     `--security-opt seccomp=/path/to/seccomp_profile.json`.
+  2. Run the container without the default seccomp profile (thus allowing all
+     system calls). Use the following parameter when creating the container:
+     `--security-opt seccomp=unconfined`.
+  3. Run the container in privileged mode.  This effectively disables usage of
+     seccomp.  Add the `--privileged` parameter when creating the container.
+
 ## Sound Support
 
 For Firefox to be able to use the audio device available on
@@ -477,6 +499,7 @@ its value.  A value can be one of the following types:
   - string
   - integer
   - boolean
+
 It is important to note that a value of type `string` should be surrounded by
 double quotes.  Other types don't need them.
 
@@ -502,13 +525,18 @@ via Firefox directly.
 
 ### Crashes
 
-If Firefox is crashing frequently, make sure the size of
-the shared memory located at `/dev/shm` has been increased.  See
-[Increasing Shared Memory Size](#increasing-shared-memory-size) section for more
-details.
+If Firefox is crashing frequently, make sure that:
+  - The size of the shared memory located at `/dev/shm` has been increased.  See
+    the [Increasing Shared Memory Size](#increasing-shared-memory-size) section
+    for more details.
+  - The `membarrier` system call is not blocked by Docker.  See the
+    [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
+    for more details.
 
 [TimeZone]: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
+[seccomp profile]: https://docs.docker.com/engine/security/seccomp/
+[latest official seccomp profile]: https://github.com/moby/moby/blob/master/profiles/seccomp/default.json
 
 ## Support or Contact
 
