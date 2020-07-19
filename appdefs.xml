@@ -143,6 +143,16 @@ If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.13.0</version>
+        <date>2020-07-19</date>
+        <change>Upgraded Firefox to version 78.0.2-r1.</change>
+        <change>Added check for missing `membarrier` system call support.</change>
+        <change>Now using baseimage v3.5.5, based on Alpine 3.12, which brings the following changes:</change>
+        <change level="2">Upgraded glibc to version 2.31 on Alpine Linux images with glibc integrated.</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+        <change level="2">Adjusted the log monitor target for recent versions of YAD.</change>
+      </release>
+      <release>
         <version>1.12.0</version>
         <date>2020-06-24</date>
         <change>Upgraded Firefox to version 77.0.1-r2.</change>
