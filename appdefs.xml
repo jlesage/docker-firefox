@@ -143,6 +143,13 @@ If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.14.0</version>
+        <date>2020-08-05</date>
+        <change>Upgraded Firefox to version 79.0-r0.</change>
+        <change>Now using baseimage to version 3.5.6, which brings the following changes:</change>
+        <change level="2">Other small adjustments for the YAD log monitor target.</change>
+      </release>
+      <release>
         <version>1.13.0</version>
         <date>2020-07-19</date>
         <change>Upgraded Firefox to version 78.0.2-r1.</change>
