@@ -33,7 +33,7 @@ do
     else
         PNAME="$EVAL"
         PVAL='""'
-    fi 
+    fi
 
     if [ "$PVAL" = "UNSET" ]; then
         log "Removing preference '$PNAME'..."
