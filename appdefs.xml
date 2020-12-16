@@ -143,6 +143,11 @@ If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.16.0</version>
+        <date>2020-12-16</date>
+        <change>Updated Firefox to version 83.0-r1.</change>
+      </release>
+      <release>
         <version>1.15.0</version>
         <date>2020-10-01</date>
         <change>Updated Firefox to version 81.0-r0</change>
