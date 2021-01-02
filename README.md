@@ -532,6 +532,7 @@ If Firefox is crashing frequently, make sure that:
   - The `membarrier` system call is not blocked by Docker.  See the
     [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
     for more details.
+  - Make sure the kernel of your Linux distribution is up-to-date.
 
 [TimeZone]: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10

@@ -125,6 +125,7 @@ If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
   - The `membarrier` system call is not blocked by Docker.  See the
     [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
     for more details.
+  - Make sure the kernel of your Linux distribution is up-to-date.
         </content>
       </section>
       <link>
