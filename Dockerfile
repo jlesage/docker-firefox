@@ -26,7 +26,7 @@ ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
-ARG YAD_URL=https://github.com/v1cont/yad/archive/v${YAD_VERSION}.tar.gz
+ARG YAD_URL=https://github.com/v1cont/yad/releases/download/v${YAD_VERSION}/yad-${YAD_VERSION}.tar.xz
 ARG JSONLZ4_URL=https://github.com/avih/dejsonlz4/archive/${JSONLZ4_VERSION}.tar.gz
 ARG LZ4_URL=https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz
 #ARG PROFILE_CLEANER_URL=https://github.com/graysky2/profile-cleaner/raw/v${PROFILE_CLEANER_VERSION}/common/profile-cleaner.in
@@ -71,10 +71,8 @@ RUN \
     # Install packages needed by the build.
     add-pkg --virtual build-dependencies \
         build-base \
-        autoconf \
-        automake \
-        intltool \
         curl \
+        intltool \
         gtk+3.0-dev \
         && \
     # Set same default compilation flags as abuild.
@@ -85,12 +83,15 @@ RUN \
     # Download.
     mkdir yad && \
     echo "Downloading YAD package..." && \
-    curl -# -L ${YAD_URL} | tar xz --strip 1  -C yad && \
+    curl -# -L ${YAD_URL} | tar xJ --strip 1  -C yad && \
     # Compile.
     cd yad && \
-    autoreconf -ivf && intltoolize && \
     ./configure \
         --prefix=/usr \
+        --enable-standalone \
+        --disable-icon-browser \
+        --disable-html \
+        --disable-pfd \
         && \
     make && make install && \
     strip /usr/bin/yad && \
