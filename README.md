@@ -237,7 +237,7 @@ For unRAID, a container image can be updated by following these steps:
 
 When using data volumes (`-v` flags), permissions issues can occur between the
 host and the container.  For example, the user within the container may not
-exists on the host.  This could prevent the host from properly accessing files
+exist on the host.  This could prevent the host from properly accessing files
 and folders on the shared volume.
 
 To avoid any problem, you can specify the user the application should run as.
@@ -477,7 +477,7 @@ To properly work, recent versions of Firefox need the
 `membarrier` system call.  Without it, tabs would frequently crash.
 
 Docker uses [seccomp profile] to restrict system calls available to the
-container.  Before Docker version `20.03.0`, the `membarrier` system call was
+container.  Before Docker version `20.10.0`, the `membarrier` system call was
 not allowed in the default profile.  If you run a such version, you can use one
 of the following solutions, from the most to the least secure, to provide the
 container permission to use this sytem call:
