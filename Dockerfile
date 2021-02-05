@@ -5,7 +5,7 @@
 #
 
 # Build the membarrier check tool.
-FROM alpine:3.12
+FROM quay.io/cdis/alpine:3.12.1
 WORKDIR /tmp
 COPY membarrier_check.c .
 RUN apk --no-cache add build-base linux-headers
