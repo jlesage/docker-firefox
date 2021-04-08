@@ -167,7 +167,6 @@ version: '3'
 services:
   firefox:
     image: jlesage/firefox
-    build: .
     ports:
       - "5800:5800"
     volumes:
