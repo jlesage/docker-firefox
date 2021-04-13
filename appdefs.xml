@@ -144,6 +144,12 @@ If {{ defs.app.friendly_name }} is crashing frequently, make sure that:
     <!-- Changelog of the application. -->
     <history>
       <release>
+        <version>1.17.1</version>
+        <date>2021-04-13</date>
+        <change>Now using baseimage version 3.5.7, which brings the following change:</change>
+        <change level="2">Updated installed packages to get latest security fixes.</change>
+      </release>
+      <release>
         <version>1.17.0</version>
         <date>2021-02-06</date>
         <change>Updated Firefox to version 84.0.2-r0.</change>
