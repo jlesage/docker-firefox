@@ -219,7 +219,8 @@ container image.
   6.  Click on *Container* in the left pane.
   7.  Select your Firefox container.
   8.  Stop it by clicking *Action*->*Stop*.
-  9.  Clear the container by clicking *Action*->*Clear*.  This removes the
+  9.  Clear the container by clicking *Action*->*Reset* (or *Action*->*Clear* if
+      you don't have the latest *Docker* application).  This removes the
       container while keeping its configuration.
   10. Start the container again by clicking *Action*->*Start*. **NOTE**:  The
       container may temporarily disappear from the list while it is re-created.
