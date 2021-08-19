@@ -13,7 +13,7 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.12-v3.5.7
+FROM jlesage/baseimage-gui:alpine-3.12-glibc-v3.5.7
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=unknown
@@ -33,6 +33,9 @@ ARG LZ4_URL=https://github.com/lz4/lz4/archive/v${LZ4_VERSION}.tar.gz
 
 # Define working directory.
 WORKDIR /tmp
+
+#Install font for chinese
+RUN apk add wqy-zenhei --update-cache --repository https://nl.alpinelinux.org/alpine/edge/testing
 
 # Install JSONLZ4 tools.
 RUN \
