@@ -183,7 +183,7 @@ The system used to run the container may have a built-in way to update
 containers.  If so, this could be your primary way to update Docker images.
 
 An other way is to have the image be automatically updated with [Watchtower].
-Whatchtower is a container-based solution for automating Docker image updates.
+Watchtower is a container-based solution for automating Docker image updates.
 This is a "set and forget" type of solution: once a new image is available,
 Watchtower will seamlessly perform the necessary steps to update the container.
 
