@@ -171,6 +171,7 @@ services:
       - "5800:5800"
     volumes:
       - "/docker/appdata/firefox:/config:rw"
+    shm_size: 2g
 ```
 
 ## Docker Image Update
