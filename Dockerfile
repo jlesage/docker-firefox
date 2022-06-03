@@ -5,7 +5,7 @@
 #
 
 # Build the membarrier check tool.
-FROM alpine:3.12
+FROM alpine:3.14 AS membarrier
 WORKDIR /tmp
 COPY membarrier_check.c .
 RUN apk --no-cache add build-base linux-headers
@@ -157,7 +157,7 @@ RUN \
 
 # Add files.
 COPY rootfs/ /
-COPY --from=0 /tmp/membarrier_check /usr/bin/
+COPY --from=membarrier /tmp/membarrier_check /usr/bin/
 
 # Set environment variables.
 ENV APP_NAME="Firefox"
