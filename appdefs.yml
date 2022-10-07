@@ -1,0 +1,287 @@
+---
+
+#
+# Definitions for Firefox docker container.
+#
+# This file is used as data source to generate README.md and unRAID template files
+# from Jinja2 templates.
+#
+#
+app:
+  id: 14
+  name: firefox
+  friendly_name: Firefox
+  gui_type: x11
+  project:
+    description: |-
+      Mozilla Firefox is a free and open-source web browser developed by Mozilla
+      Foundation and its subsidiary, Mozilla Corporation.
+    url: https://www.mozilla.org/en-US/firefox/
+  unraid:
+    support_url: https://forums.unraid.net/topic/69440-support-firefox/
+    category: "Tools:"
+  documentation:
+    sections:
+      - title: Increasing Shared Memory Size
+        level: 2
+        content: |-
+          To prevent crashes from happening when running {{ app.friendly_name }}
+          inside a Docker container, the size of the shared memory located at `/dev/shm`
+          must be increased.  The issue is documented [here].
+
+          By default, the size is 64MB, which is not enough.  It is recommended to use a
+          size of 2GB.  This value is arbitrary, but known to work well.  Setting the
+          size of `/dev/shm` can be done via two method:
+
+            - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
+              the [Usage](#usage) section for more details.
+            - By using shared memory of the host, by mapping `/dev/shm` via the parameter
+              `-v /dev/shm:/dev/shm` of the `docker run` command.
+      - title: Allowing the membarrier System Call
+        level: 2
+        content: |-
+          To properly work, recent versions of {{ app.friendly_name }} need the
+          `membarrier` system call.  Without it, tabs would frequently crash.
+
+          Docker uses [seccomp profile] to restrict system calls available to the
+          container.  Before Docker version `20.10.0`, the `membarrier` system call was
+          not allowed in the default profile.  If you run a such version, you can use one
+          of the following solutions, from the most to the least secure, to provide the
+          container permission to use this sytem call:
+
+            1. Run the container with a custom seccomp profile allowing the `membarrier`
+               system call.  The [latest official seccomp profile] can be used.  Download
+               the file and then add the following parameter when creating the container:
+               `--security-opt seccomp=/path/to/seccomp_profile.json`.
+            2. Run the container without the default seccomp profile (thus allowing all
+               system calls). Use the following parameter when creating the container:
+               `--security-opt seccomp=unconfined`.
+            3. Run the container in privileged mode.  This effectively disables usage of
+               seccomp.  Add the `--privileged` parameter when creating the container.
+
+            [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
+            [latest official seccomp profile]: https://github.com/moby/moby/blob/master/profiles/seccomp/default.json
+            [seccomp profile]: https://docs.docker.com/engine/security/seccomp/
+      - title: Sound Support
+        level: 2
+        content: |-
+          For {{ app.friendly_name }} to be able to use the audio device available on
+          the host, `/dev/snd` must be exposed to the container by adding the
+          `--device /dev/snd` parameter to the `docker run` command.
+      - title: Setting {{ app.friendly_name }} Preferences Via Environment Variables
+        level: 2
+        content: |-
+          {{ app.friendly_name }} preferences can be set via environment variables
+          passed to the container.  During the startup, a script process all these
+          variables and modify the preference file accordingly.
+
+          The name of the environment variable must start with `FF_PREF_`, followed by a
+          string of your choice.  For example, `FF_PREF_MY_PREF` is a valid name.
+
+          The content of the variable should be in the format `NAME=VAL`, where `NAME` is
+          the name of the preference (as found in the `about:config` page) and `VAL` is
+          its value.  A value can be one of the following types:
+            - string
+            - integer
+            - boolean
+
+          It is important to note that a value of type `string` should be surrounded by
+          double quotes.  Other types don't need them.
+
+          For example, to set the `network.proxy.http` preference, one would pass the
+          environment variable to the container by adding the following argument to the
+          `docker run` command:
+
+          ```
+          -e "FF_PREF_HTTP_PROXY=network.proxy.http=\"proxy.example.com\""
+          ```
+
+          If a preference needs to be *removed*, its value should be set to `UNSET`.  For
+          example:
+
+          ```
+          -e "FF_PREF_HTTP_PROXY=network.proxy.http=UNSET"
+          ```
+
+          **NOTE**: This is an advanced usage and it is recommended to set preferences
+          via {{ app.friendly_name }} directly.
+      - title: Troubleshooting
+        level: 2
+      - title: Crashes
+        level: 3
+        content: |-
+          If {{ app.friendly_name }} is crashing frequently, make sure that:
+            - The size of the shared memory located at `/dev/shm` has been increased.  See
+              the [Increasing Shared Memory Size](#increasing-shared-memory-size) section
+              for more details.
+            - The `membarrier` system call is not blocked by Docker.  See the
+              [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
+              for more details.
+            - Make sure the kernel of your Linux distribution is up-to-date.
+  changelog:
+    - version: 1.18.0
+      date: 2021-12-30
+      changes:
+        - 'Updated Firefox to version 94.0-r0.'
+        - 'Now using baseimage version 3.5.8, based on Alpine 3.15, which brings the following change:'
+        - '2:Updated installed packages to get latest security fixes.'
+    - version: 1.17.1
+      date: 2021-04-13
+      changes:
+        - 'Now using baseimage version 3.5.7, which brings the following change:'
+        - '2:Updated installed packages to get latest security fixes.'
+    - version: 1.17.0
+      date: 2021-02-06
+      changes:
+        - 'Updated Firefox to version 84.0.2-r0.'
+    - version: 1.16.0
+      date: 2020-12-16
+      changes:
+        - 'Updated Firefox to version 83.0-r1.'
+    - version: 1.15.0
+      date: 2020-10-01
+      changes:
+        - 'Updated Firefox to version 81.0-r0'
+    - version: 1.14.0
+      date: 2020-08-05
+      changes:
+        - 'Upgraded Firefox to version 79.0-r0.'
+        - 'Now using baseimage to version 3.5.6, which brings the following changes:'
+        - '2:Other small adjustments for the YAD log monitor target.'
+    - version: 1.13.0
+      date: 2020-07-19
+      changes:
+        - 'Upgraded Firefox to version 78.0.2-r1.'
+        - 'Added check for missing `membarrier` system call support.'
+        - 'Now using baseimage v3.5.5, based on Alpine 3.12, which brings the following changes:'
+        - '2:Upgraded glibc to version 2.31 on Alpine Linux images with glibc integrated.'
+        - '2:Updated installed packages to get latest security fixes.'
+        - '2:Adjusted the log monitor target for recent versions of YAD.'
+    - version: 1.12.0
+      date: 2020-06-24
+      changes:
+        - 'Upgraded Firefox to version 77.0.1-r2.'
+    - version: 1.11.0
+      date: 2020-04-25
+      changes:
+        - 'Upgraded Firefox to version 75.0-r2.'
+    - version: 1.10.0
+      date: 2020-03-15
+      changes:
+        - 'Upgraded Firefox to version 74.0-r0.'
+    - version: 1.9.1
+      date: 2020-02-10
+      changes:
+        - 'Upgraded Firefox to version 72.0.2-r0.'
+    - version: 1.9.0
+      date: 2020-01-14
+      changes:
+        - 'Upgraded Firefox to version 72.0.1-r0.'
+    - version: 1.8.0
+      date: 2019-12-25
+      changes:
+        - 'Upgraded Firefox to version 71.0-r0.'
+        - 'Now using baseimage v3.5.3, which brings the following changes:'
+        - '2:Updated installed packages to get latest security fixes.'
+        - '2:Make sure the tzdata is installed.'
+        - 'Use baseimage based on Alpine Linux 3.10.'
+    - version: 1.7.1
+      date: 2019-08-26
+      changes:
+        - 'Upgraded Firefox to version 68.0.2-r0.'
+    - version: 1.7.0
+      date: 2019-08-05
+      changes:
+        - 'Upgraded Firefox to version 68.0.r0.'
+    - version: 1.6.0
+      date: 2019-07-17
+      changes:
+        - 'Upgraded Firefox to version 67.0.4-r0.'
+    - version: 1.5.1
+      date: 2019-05-12
+      changes:
+        - 'Upgraded Firefox to version 66.0.5-r1.'
+    - version: 1.5.0
+      date: 2019-05-09
+      changes:
+        - 'Upgraded Firefox to version 66.0.4-r0.'
+        - 'Print the Firefox version during the container startup.'
+    - version: 1.4.1
+      date: 2019-04-24
+      changes:
+        - 'Upgraded Firefox to version 62.0.3-r4.'
+        - 'Now using baseimage v3.5.2, which brings the following changes:'
+        - '2:Updated installed packages to get latest security fixes.'
+        - '2:Fixed issue where the container could have a zombie process.'
+        - '2:Fixed issue where the password would not be submitted when pressing the enter key in the password modal.'
+        - '2:Use relative path for favicon ressources to be more friendly with reverse proxy senarios.'
+    - version: 1.4.0
+      date: 2019-02-24
+      changes:
+        - 'Upgraded Firefox to version 62.0.3-r2.'
+        - 'Preferences can now be set via environment variables.'
+        - 'Use baseimage based on Alpine Linux 3.9.'
+    - version: 1.3.1
+      date: 2018-09-18
+      changes:
+        - 'Now using baseimage v3.5.1, which brings the following changes:'
+        - '2:Updated installed packages to get latest security fixes.'
+    - version: 1.3.0
+      date: 2018-07-27
+      changes:
+        - 'Added support for more playable video formats.'
+        - 'Added support for sound in Firefox.'
+    - version: 1.2.0
+      date: 2018-07-12
+      changes:
+        - 'Now using baseimage v3.4.0, which is based on Alpine Linux 3.8.'
+        - 'Upgraded Firefox to version 61.0.1-r0.'
+    - version: 1.1.0
+      date: 2018-05-31
+      changes:
+        - 'Upgraded Firefox to version 60.0.1-r0.'
+    - version: 1.0.2
+      date: 2018-03-15
+      changes:
+        - 'Fixed issue where Firefox would not gracefully terminate.'
+        - 'Fixed an issue where restoring session would resize window to the wrong dimensions.'
+    - version: 1.0.1
+      date: 2018-03-02
+      changes:
+        - 'Now using baseimage v3.3.4, which brings the following changes:'
+        - '2:Fixed issue where log monitor states were not cleared during container startup.'
+        - 'Updated Firefox to version 58.0.1-r2.'
+    - version: 1.0.0
+      date: 2018-02-16
+      changes:
+        - 'Initial release.'
+
+container:
+  rough_download_size: 150MB
+  unsupported_volume: /storage
+
+  # Environment variables.
+  environment_variables: []
+
+  # Volumes
+  volumes: []
+
+  # Network ports
+  ports: []
+
+  # Devices
+  devices:
+    - path: /dev/snd
+      description: Optional Linux device to expose to have sound.
+
+  # Extra parameters
+  extra_params:
+    - name: shm-size
+      value: 2g
+      description: >-
+        Set the size of `/dev/shm` to `VALUE`.  The format of `VALUE` is
+        `<number><unit>`, where `number` must be greater than `0` and `unit`
+        can be `b` (bytes), `k` (kilobytes), `m` (megabytes), or `g`
+        (gigabytes).  **NOTE**: To avoid crashes, it is recommended to set this
+        value to `2g`.
+      include_in_quick_start: true
