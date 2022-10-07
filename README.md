@@ -1,49 +1,50 @@
 # Docker container for Firefox
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/firefox/latest)](https://hub.docker.com/r/jlesage/firefox/tags) [![Build Status](https://drone.le-sage.com/api/badges/jlesage/docker-firefox/status.svg)](https://drone.le-sage.com/jlesage/docker-firefox) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg)](https://github.com/jlesage/docker-firefox/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/firefox/latest)](https://hub.docker.com/r/jlesage/firefox/tags) [![Build Status](https://github.com/jlesage/docker-firefox/actions/workflows/build-image.yml/badge.svg?branch=master)](https://github.com/jlesage/docker-firefox/actions/workflows/build-image.yml) [![GitHub Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg)](https://github.com/jlesage/docker-firefox/releases/latest) [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/JocelynLeSage/0usd)
 
 This is a Docker container for [Firefox](https://www.mozilla.org/en-US/firefox/).
 
-The GUI of the application is accessed through a modern web browser (no installation or configuration needed on the client side) or via any VNC client.
+The GUI of the application is accessed through a modern web browser (no
+installation or configuration needed on the client side) or via any VNC client.
 
 ---
 
-[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/firefox-icon.png&w=200)](https://www.mozilla.org/en-US/firefox/)[![Firefox](https://dummyimage.com/400x110/ffffff/575757&text=Firefox)](https://www.mozilla.org/en-US/firefox/)
+[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/firefox-icon.png&w=200)](https://www.mozilla.org/en-US/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=Georgia,sans-serif&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/en-US/firefox/)
 
-Mozilla Firefox is a free and open-source web browser developed by Mozilla Foundation and its subsidiary, Mozilla Corporation.
+Mozilla Firefox is a free and open-source web browser developed by Mozilla
+Foundation and its subsidiary, Mozilla Corporation.
 
 ---
 
 ## Table of Content
 
-   * [Docker container for Firefox](#docker-container-for-firefox)
-      * [Table of Content](#table-of-content)
-      * [Quick Start](#quick-start)
-      * [Usage](#usage)
-         * [Environment Variables](#environment-variables)
-         * [Data Volumes](#data-volumes)
-         * [Ports](#ports)
-         * [Changing Parameters of a Running Container](#changing-parameters-of-a-running-container)
-      * [Docker Compose File](#docker-compose-file)
-      * [Docker Image Update](#docker-image-update)
-         * [Synology](#synology)
-         * [unRAID](#unraid)
-      * [User/Group IDs](#usergroup-ids)
-      * [Accessing the GUI](#accessing-the-gui)
-      * [Security](#security)
-         * [SSVNC](#ssvnc)
-         * [Certificates](#certificates)
-         * [VNC Password](#vnc-password)
-      * [Reverse Proxy](#reverse-proxy)
-         * [Routing Based on Hostname](#routing-based-on-hostname)
-         * [Routing Based on URL Path](#routing-based-on-url-path)
-      * [Shell Access](#shell-access)
-      * [Increasing Shared Memory Size](#increasing-shared-memory-size)
-      * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
-      * [Sound Support](#sound-support)
-      * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
-      * [Troubleshooting](#troubleshooting)
-         * [Crashes](#crashes)
-      * [Support or Contact](#support-or-contact)
+   * [Quick Start](#quick-start)
+   * [Usage](#usage)
+      * [Environment Variables](#environment-variables)
+      * [Data Volumes](#data-volumes)
+      * [Ports](#ports)
+      * [Changing Parameters of a Running Container](#changing-parameters-of-a-running-container)
+   * [Docker Compose File](#docker-compose-file)
+   * [Docker Image Versioning](#docker-image-versioning)
+   * [Docker Image Update](#docker-image-update)
+      * [Synology](#synology)
+      * [unRAID](#unraid)
+   * [User/Group IDs](#usergroup-ids)
+   * [Accessing the GUI](#accessing-the-gui)
+   * [Security](#security)
+      * [SSVNC](#ssvnc)
+      * [Certificates](#certificates)
+      * [VNC Password](#vnc-password)
+   * [Reverse Proxy](#reverse-proxy)
+      * [Routing Based on Hostname](#routing-based-on-hostname)
+      * [Routing Based on URL Path](#routing-based-on-url-path)
+   * [Shell Access](#shell-access)
+   * [Increasing Shared Memory Size](#increasing-shared-memory-size)
+   * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
+   * [Sound Support](#sound-support)
+   * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
+   * [Troubleshooting](#troubleshooting)
+      * [Crashes](#crashes)
+   * [Support or Contact](#support-or-contact)
 
 ## Quick Start
 
@@ -51,7 +52,7 @@ Mozilla Firefox is a free and open-source web browser developed by Mozilla Found
 and parameters should be adjusted to your need.
 
 Launch the Firefox docker container with the following command:
-```
+```shell
 docker run -d \
     --name=firefox \
     -p 5800:5800 \
@@ -61,13 +62,13 @@ docker run -d \
 ```
 
 Where:
-  - `/docker/appdata/firefox`: This is where the application stores its configuration, log and any files needing persistency.
+  - `/docker/appdata/firefox`: This is where the application stores its configuration, states, log and any files needing persistency.
 
 Browse to `http://your-host-ip:5800` to access the Firefox GUI.
 
 ## Usage
 
-```
+```shell
 docker run [-d] \
     --name=firefox \
     [-e <VARIABLE_NAME>=<VALUE>]... \
@@ -94,17 +95,22 @@ of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 |----------------|----------------------------------------------|---------|
 |`USER_ID`| ID of the user the application runs as.  See [User/Group IDs](#usergroup-ids) to better understand when this should be set. | `1000` |
 |`GROUP_ID`| ID of the group the application runs as.  See [User/Group IDs](#usergroup-ids) to better understand when this should be set. | `1000` |
-|`SUP_GROUP_IDS`| Comma-separated list of supplementary group IDs of the application. | (unset) |
-|`UMASK`| Mask that controls how file permissions are set for newly created files. The value of the mask is in octal notation.  By default, this variable is not set and the default umask of `022` is used, meaning that newly created files are readable by everyone, but only writable by the owner. See the following online umask calculator: http://wintelguy.com/umask-calc.pl | (unset) |
-|`TZ`| [TimeZone] of the container.  Timezone can also be set by mapping `/etc/localtime` between the host and the container. | `Etc/UTC` |
-|`KEEP_APP_RUNNING`| When set to `1`, the application will be automatically restarted if it crashes or if a user quits it. | `0` |
-|`APP_NICENESS`| Priority at which the application should run.  A niceness value of -20 is the highest priority and 19 is the lowest priority.  By default, niceness is not set, meaning that the default niceness of 0 is used.  **NOTE**: A negative niceness (priority increase) requires additional permissions.  In this case, the container should be run with the docker option `--cap-add=SYS_NICE`. | (unset) |
-|`CLEAN_TMP_DIR`| When set to `1`, all files in the `/tmp` directory are deleted during the container startup. | `1` |
-|`DISPLAY_WIDTH`| Width (in pixels) of the application's window. | `1280` |
-|`DISPLAY_HEIGHT`| Height (in pixels) of the application's window. | `768` |
+|`SUP_GROUP_IDS`| Comma-separated list of supplementary group IDs of the application. | `""` |
+|`UMASK`| Mask that controls how file permissions are set for newly created files. The value of the mask is in octal notation.  By default, the default umask value is `0022`, meaning that newly created files are readable by everyone, but only writable by the owner.  See the online umask calculator at http://wintelguy.com/umask-calc.pl. | `0022` |
+|`TZ`| [TimeZone](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones) used by the container.  Timezone can also be set by mapping `/etc/localtime` between the host and the container. | `Etc/UTC` |
+|`KEEP_APP_RUNNING`| When set to `1`, the application will be automatically restarted when it crashes or terminates. | `0` |
+|`APP_NICENESS`| Priority at which the application should run.  A niceness value of -20 is the highest priority and 19 is the lowest priority.  The default niceness value is 0.  **NOTE**: A negative niceness (priority increase) requires additional permissions.  In this case, the container should be run with the docker option `--cap-add=SYS_NICE`. | `0` |
+|`INSTALL_PACKAGES`| Space-separated list of packages to install during the startup of the container.  Packages are installed from the repository of the Linux distribution this container is based on.  **ATTENTION**: Container functionality can be affected when installing a package that overrides existing container files (e.g. binaries). | `""` |
+|`CONTAINER_DEBUG`| Set to `1` to enable debug logging. | `0` |
+|`DISPLAY_WIDTH`| Width (in pixels) of the application's window. | `1920` |
+|`DISPLAY_HEIGHT`| Height (in pixels) of the application's window. | `1080` |
+|`DARK_MODE`| When set to `1`, dark mode is enabled for the application. | `0` |
 |`SECURE_CONNECTION`| When set to `1`, an encrypted connection is used to access the application's GUI (either via a web browser or VNC client).  See the [Security](#security) section for more details. | `0` |
-|`VNC_PASSWORD`| Password needed to connect to the application's GUI.  See the [VNC Password](#vnc-password) section for more details. | (unset) |
-|`X11VNC_EXTRA_OPTS`| Extra options to pass to the x11vnc server running in the Docker container.  **WARNING**: For advanced users. Do not use unless you know what you are doing. | (unset) |
+|`SECURE_CONNECTION_VNC_METHOD`| Method used to perform the secure VNC connection.  Possible values are `SSL` or `TLS`.  See the [Security](#security) section for more details. | `SSL` |
+|`SECURE_CONNECTION_CERTS_CHECK_INTERVAL`| Interval, in seconds, at which the system verifies if web or VNC certificates have changed.  When a change is detected, the affected services are automatically restarted.  A value of `0` disables the check. | `60` |
+|`WEB_LISTENING_PORT`| Port used by the web server to serve the UI of the application.  This port is used internally by the container and it is usually not required to be changed.  By default, a container is created with the default bridge network, meaning that, to be accessible, each internal container port must be mapped to an external port (using the `-p` or `--publish` argument).  However, if the container is created with another network type, changing the port used by the container might be useful to prevent conflict with other services/containers.  **NOTE**: a value of `-1` disables listening, meaning that the application's UI won't be accessible over HTTP/HTTPs. | `5800` |
+|`VNC_LISTENING_PORT`| Port used by the VNC server to serve the UI of the application.  This port is used internally by the container and it is usually not required to be changed.  By default, a container is created with the default bridge network, meaning that, to be accessible, each internal container port must be mapped to an external port (using the `-p` or `--publish` argument).  However, if the container is created with another network type, changing the port used by the container might be useful to prevent conflict with other services/containers.  **NOTE**: a value of `-1` disables listening, meaning that the application's UI won't be accessible over VNC. | `5900` |
+|`VNC_PASSWORD`| Password needed to connect to the application's GUI.  See the [VNC Password](#vnc-password) section for more details. | `""` |
 |`ENABLE_CJK_FONT`| When set to `1`, open-source computer font `WenQuanYi Zen Hei` is installed.  This font contains a large range of Chinese/Japanese/Korean characters. | `0` |
 
 ### Data Volumes
@@ -115,7 +121,7 @@ format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
 
 | Container path  | Permissions | Description |
 |-----------------|-------------|-------------|
-|`/config`| rw | This is where the application stores its configuration, log and any files needing persistency. |
+|`/config`| rw | This is where the application stores its configuration, states, log and any files needing persistency. |
 
 ### Ports
 
@@ -126,8 +132,8 @@ container cannot be changed, but you are free to use any port on the host side.
 
 | Port | Mapping to host | Description |
 |------|-----------------|-------------|
-| 5800 | Mandatory | Port used to access the application's GUI via the web interface. |
-| 5900 | Optional | Port used to access the application's GUI via the VNC protocol.  Optional if no VNC client is used. |
+| 5800 | Optional | Port to access the application's GUI via the web interface.  Mapping to the host is optional if access through the web interface is not wanted.  For a container not using the default bridge network, the port can be changed with the `WEB_LISTENING_PORT` environment variable. |
+| 5900 | Optional | Port to access the application's GUI via the VNC protocol.  Mapping to the host is optional if access through the VNC protocol is not wanted.  For a container not using the default bridge network, the port can be changed with the `VNC_LISTENING_PORT` environment variable. |
 
 ### Changing Parameters of a Running Container
 
@@ -172,6 +178,19 @@ services:
     volumes:
       - "/docker/appdata/firefox:/config:rw"
 ```
+
+## Docker Image Versioning
+
+Each release of a Docker image is versioned.  Prio to october 2022, the
+[semantic versioning](https://semver.org) was used as the versioning scheme.
+
+Since then, versioning scheme changed to
+[calendar versioning](https://calver.org).  The format used is `YY.MM.SEQUENCE`,
+where:
+  - `YY` is the zero-padded year (relative to year 2000).
+  - `MM` is the zero-padded month.
+  - `SEQUENCE` is the incremental release number within the month (first release
+    is 1, second is 2, etc).
 
 ## Docker Image Update
 
@@ -449,7 +468,7 @@ server {
 
 To get shell access to the running container, execute the following command:
 
-```
+```shell
 docker exec -ti CONTAINER sh
 ```
 
@@ -491,6 +510,10 @@ container permission to use this sytem call:
      `--security-opt seccomp=unconfined`.
   3. Run the container in privileged mode.  This effectively disables usage of
      seccomp.  Add the `--privileged` parameter when creating the container.
+
+  [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
+  [latest official seccomp profile]: https://github.com/moby/moby/blob/master/profiles/seccomp/default.json
+  [seccomp profile]: https://docs.docker.com/engine/security/seccomp/
 
 ## Sound Support
 
@@ -547,11 +570,6 @@ If Firefox is crashing frequently, make sure that:
     [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
     for more details.
   - Make sure the kernel of your Linux distribution is up-to-date.
-
-[TimeZone]: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-[here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
-[seccomp profile]: https://docs.docker.com/engine/security/seccomp/
-[latest official seccomp profile]: https://github.com/moby/moby/blob/master/profiles/seccomp/default.json
 
 ## Support or Contact
 
