@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+# Set location of profile.
+echo "--profile"
+echo "/config/profile"
+
+# Make sure we don't get ask to be the default browser.
+echo "--setDefaultBrowser"
+
+# Check if kiosk mode is enabled.
+if [ "${FF_KIOSK:-0}" == 1 ]; then
+    echo "--kiosk"
+fi
+
+# URL to open.
+# NOTE: This should be the last argument.
+if [ -n "${FF_OPEN_URL:-}" ]; then
+    echo "$FF_OPEN_URL"
+fi

@@ -6,4 +6,4 @@ set -u # Treat unset variables as an error.
 export HOME=/config
 
 /usr/bin/firefox --version
-exec /usr/bin/firefox  --profile /config/profile --setDefaultBrowser >> /config/log/firefox/output.log 2>> /config/log/firefox/error.log
+exec /usr/bin/firefox "$@" >> /config/log/firefox/output.log 2>> /config/log/firefox/error.log

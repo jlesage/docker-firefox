@@ -119,6 +119,11 @@ RUN \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     true
 
+# Set public environment variables.
+ENV \
+    FF_OPEN_URL= \
+    FF_KIOSK=0
+
 # Define mountable directories.
 VOLUME ["/config"]
 
