@@ -6,12 +6,16 @@ set -u # Treat unset variables as an error.
 # Make sure some directories are created.
 mkdir -p /config/downloads
 mkdir -p /config/log/firefox
+mkdir -p /config/profile
 
 # Generate machine id.
 if [ ! -f /etc/machine-id ]; then
     echo "generating machine-id..."
     cat /proc/sys/kernel/random/uuid | tr -d '-' > /etc/machine-id
 fi
+
+# Copy default preferences.
+[ -f /config/profile/prefs.js ] || cp /defaults/prefs.js /config/profile/prefs.js
 
 # Verify the size of /dev/shm.
 SHM_SIZE_MB="$(df -m /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f2)"
