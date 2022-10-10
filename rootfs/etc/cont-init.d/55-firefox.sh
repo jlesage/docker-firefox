@@ -9,9 +9,9 @@ mkdir -p /config/log/firefox
 mkdir -p /config/profile
 
 # Generate machine id.
-if [ ! -f /etc/machine-id ]; then
+if [ ! -f /config/machine-id ]; then
     echo "generating machine-id..."
-    cat /proc/sys/kernel/random/uuid | tr -d '-' > /etc/machine-id
+    cat /proc/sys/kernel/random/uuid | tr -d '-' > /config/machine-id
 fi
 
 # Copy default preferences.
