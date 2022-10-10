@@ -68,7 +68,4 @@ do
     touch "$LOG_FILE"
 done
 
-# Take ownership of the config directory content.
-find /config -mindepth 1 -exec chown $USER_ID:$GROUP_ID {} \;
-
 # vim: set ft=sh :
