@@ -129,11 +129,6 @@ jobs:
         run: |
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_NAME }}:${{ steps.prep.outputs.version }}
 
-  post-build:
-    name: Post-build
-    needs: [ build ]
-    runs-on: ubuntu-20.04
-    steps:
       - name: Dockerhub description
         if: ${{ steps.prep.outputs.release_type == 'standard' }}
         uses: peter-evans/dockerhub-description@v3
@@ -145,7 +140,7 @@ jobs:
 
   notification:
     name: Notification
-    needs: [ build, post-build ]
+    needs: [ build ]
     runs-on: ubuntu-20.04
     if: ${{ always() }}
 
