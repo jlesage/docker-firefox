@@ -124,9 +124,6 @@ ENV \
     FF_OPEN_URL= \
     FF_KIOSK=0
 
-# Define mountable directories.
-VOLUME ["/config"]
-
 # Metadata.
 LABEL \
       org.label-schema.name="firefox" \
