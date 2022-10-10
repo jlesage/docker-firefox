@@ -119,6 +119,12 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 22.10.2
+      date: 2022-10-10
+      changes:
+        - 'Fixed an issue where taking ownership of `/config` would fail if a subfolder is mapped to a network share.'
+        - 'Fixed handling of exposed sound device.'
+        - 'Fixed handling of the VNC password.'
     - version: 22.10.1
       date: 2022-10-09
       changes:
