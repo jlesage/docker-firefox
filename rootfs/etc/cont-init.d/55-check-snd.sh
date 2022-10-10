@@ -13,9 +13,5 @@ fi
 # Save the associated group.
 SND_GRP="$(find "$SND_DEV" -maxdepth 1 -not -type d -exec stat -c "%g" {} \; | sort -u | tail -n1)"
 echo "sound device group $SND_GRP."
-if [ -f /var/run/s6/container_environment/SUP_GROUP_IDS ]; then
-    echo -n "," >> /var/run/s6/container_environment/SUP_GROUP_IDS
-fi
-echo -n "$SND_GRP" >> /var/run/s6/container_environment/SUP_GROUP_IDS
 
 # vim: set ft=sh :

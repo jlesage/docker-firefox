@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Get the supplementary group ID(s) needed to access sound device.  These are
+# added to the ones provided by $SUP_GROUP_IDS.
+#
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+SND_DEV="/dev/snd"
+
+SUP_GROUP_IDS="${SUP_GROUP_IDS:-}"
+
+# Add group associated to the sound device.
+if [ -d "$SND_DEV" ]; then
+    # Save the associated group.
+    SND_GRP="$(find "$SND_DEV" -maxdepth 1 -not -type d -exec stat -c "%g" {} \; | sort -u | tail -n1)"
+
+    if [ -n "$SUP_GROUP_IDS" ]; then
+        SUP_GROUP_IDS="$SUP_GROUP_IDS,$SND_GRP"
+    else
+        SUP_GROUP_IDS="$SND_GRP"
+    fi
+fi
+
+echo "$SUP_GROUP_IDS" | tr ',' '\n'
+
+# vim:ft=sh:ts=4:sw=4:et:sts=4
