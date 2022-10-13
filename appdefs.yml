@@ -6,7 +6,7 @@
 # This file is used as data source to generate README.md and unRAID template files
 # from Jinja2 templates.
 #
-#
+
 app:
   id: 14
   name: firefox
