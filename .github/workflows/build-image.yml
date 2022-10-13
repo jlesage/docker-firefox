@@ -1,5 +1,9 @@
 name: Docker image CI/CD
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DOCKER_IMAGE_NAME: jlesage/firefox
   PLATFORMS: linux/amd64,linux/386,linux/arm/v7,linux/arm64/v8
