@@ -183,7 +183,7 @@ services:
 
 ## Docker Image Versioning
 
-Each release of a Docker image is versioned.  Prio to october 2022, the
+Each release of a Docker image is versioned.  Prior to october 2022, the
 [semantic versioning](https://semver.org) was used as the versioning scheme.
 
 Since then, versioning scheme changed to
