@@ -142,7 +142,7 @@ app:
     - version: 22.10.1
       date: 2022-10-09
       changes:
-        - 'Versioning scheme changed to `YY.MM.SEQUENCE`.'
+        - 'Versioning scheme of the Docker image changed to `YY.MM.SEQUENCE`.'
         - 'Updated Firefox to version 101.0.1-r0.'
         - 'Added support for kiosk mode.'
         - 'Added support for URL opening at launch.'
