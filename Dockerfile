@@ -68,7 +68,7 @@ RUN \
         # Icons used by folder/file selection window (when saving as).
         adwaita-icon-theme \
         # A font is needed.
-        ttf-dejavu \
+        font-cantarell \
         # The following package is used to send key presses to the X process.
         xdotool \
         && \
