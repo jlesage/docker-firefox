@@ -13,13 +13,13 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.16-v4.1.1
+FROM jlesage/baseimage-gui:alpine-3.17-v4.2.1
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG FIREFOX_VERSION=101.0.1-r0
+ARG FIREFOX_VERSION=107.0.1-r1
 ARG JSONLZ4_VERSION=c4305b8
 ARG LZ4_VERSION=1.8.1.2
 #ARG PROFILE_CLEANER_VERSION=2.36
@@ -66,16 +66,19 @@ RUN \
 RUN \
     add-pkg \
         # Icons used by folder/file selection window (when saving as).
-        gnome-icon-theme \
+        adwaita-icon-theme \
         # A font is needed.
         ttf-dejavu \
         # The following package is used to send key presses to the X process.
-        xdotool
+        xdotool \
+        && \
+    # Remove unneeded icons.
+    find /usr/share/icons/Adwaita -type d -mindepth 1 -maxdepth 1 -not -name 16x16 -not -name scalable -exec rm -rf {} ';' && \
+    true
 
 # Set default settings.
 RUN \
-    CFG_FILE="$(ls /usr/lib/firefox/browser/defaults/preferences/firefox-branding.js)" && \
-    echo '' >> "$CFG_FILE" && \
+    CFG_FILE="/usr/lib/firefox/browser/defaults/preferences/firefox-branding.js" && \
     echo '// Default download directory.' >> "$CFG_FILE" && \
     echo 'pref("browser.download.dir", "/config/downloads");' >> "$CFG_FILE" && \
     echo 'pref("browser.download.folderList", 2);' >> "$CFG_FILE"
