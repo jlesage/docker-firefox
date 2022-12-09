@@ -119,6 +119,11 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 22.12.1
+      date: 2022-12-09
+      changes:
+        - 'Updated Firefox to version 107.0.1-r1.'
+        - 'Updated baseimage to version `4.2.1`, which brings multiple internal enhancements.'
     - version: 22.10.4
       date: 2022-10-24
       changes:
