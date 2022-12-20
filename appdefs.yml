@@ -307,7 +307,6 @@ container:
       description: >-
         The URL to open when {{ app.friendly_name }} starts.
       type: public
-      default:
     - name: FF_KIOSK
       description: >-
         Set to `1` to enable kiosk mode.  This mode launches Firefox in a very
