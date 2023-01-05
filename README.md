@@ -38,7 +38,6 @@ Foundation and its subsidiary, Mozilla Corporation.
       * [Routing Based on Hostname](#routing-based-on-hostname)
       * [Routing Based on URL Path](#routing-based-on-url-path)
    * [Shell Access](#shell-access)
-   * [Increasing Shared Memory Size](#increasing-shared-memory-size)
    * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
    * [Sound Support](#sound-support)
    * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
@@ -57,7 +56,6 @@ docker run -d \
     --name=firefox \
     -p 5800:5800 \
     -v /docker/appdata/firefox:/config:rw \
-    --shm-size 2g \
     jlesage/firefox
 ```
 
@@ -74,7 +72,6 @@ docker run [-d] \
     [-e <VARIABLE_NAME>=<VALUE>]... \
     [-v <HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]]... \
     [-p <HOST_PORT>:<CONTAINER_PORT>]... \
-    --shm-size VALUE \
     jlesage/firefox
 ```
 | Parameter | Description |
@@ -83,7 +80,6 @@ docker run [-d] \
 | -e        | Pass an environment variable to the container.  See the [Environment Variables](#environment-variables) section for more details. |
 | -v        | Set a volume mapping (allows to share a folder/file between the host and the container).  See the [Data Volumes](#data-volumes) section for more details. |
 | -p        | Set a network port mapping (exposes an internal container port to the host).  See the [Ports](#ports) section for more details. |
-| --shm-size | Set the size of `/dev/shm` to `VALUE`.  The format of `VALUE` is `<number><unit>`, where `number` must be greater than `0` and `unit` can be `b` (bytes), `k` (kilobytes), `m` (megabytes), or `g` (gigabytes).  **NOTE**: To avoid crashes, it is recommended to set this value to `2g`. |
 
 ### Environment Variables
 
@@ -478,21 +474,6 @@ docker exec -ti CONTAINER sh
 Where `CONTAINER` is the ID or the name of the container used during its
 creation.
 
-## Increasing Shared Memory Size
-
-To prevent crashes from happening when running Firefox
-inside a Docker container, the size of the shared memory located at `/dev/shm`
-must be increased.  The issue is documented [here].
-
-By default, the size is 64MB, which is not enough.  It is recommended to use a
-size of 2GB.  This value is arbitrary, but known to work well.  Setting the
-size of `/dev/shm` can be done via two method:
-
-  - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
-    the [Usage](#usage) section for more details.
-  - By using shared memory of the host, by mapping `/dev/shm` via the parameter
-    `-v /dev/shm:/dev/shm` of the `docker run` command.
-
 ## Allowing the membarrier System Call
 
 To properly work, recent versions of Firefox need the
@@ -566,9 +547,6 @@ via Firefox directly.
 ### Crashes
 
 If Firefox is crashing frequently, make sure that:
-  - The size of the shared memory located at `/dev/shm` has been increased.  See
-    the [Increasing Shared Memory Size](#increasing-shared-memory-size) section
-    for more details.
   - The `membarrier` system call is not blocked by Docker.  See the
     [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
     for more details.

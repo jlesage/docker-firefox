@@ -22,21 +22,6 @@ app:
     category: "Tools:"
   documentation:
     sections:
-      - title: Increasing Shared Memory Size
-        level: 2
-        content: |-
-          To prevent crashes from happening when running {{ app.friendly_name }}
-          inside a Docker container, the size of the shared memory located at `/dev/shm`
-          must be increased.  The issue is documented [here].
-
-          By default, the size is 64MB, which is not enough.  It is recommended to use a
-          size of 2GB.  This value is arbitrary, but known to work well.  Setting the
-          size of `/dev/shm` can be done via two method:
-
-            - By adding the `--shm-size 2g` parameter to the `docker run` command.  See
-              the [Usage](#usage) section for more details.
-            - By using shared memory of the host, by mapping `/dev/shm` via the parameter
-              `-v /dev/shm:/dev/shm` of the `docker run` command.
       - title: Allowing the membarrier System Call
         level: 2
         content: |-
@@ -111,9 +96,6 @@ app:
         level: 3
         content: |-
           If {{ app.friendly_name }} is crashing frequently, make sure that:
-            - The size of the shared memory located at `/dev/shm` has been increased.  See
-              the [Increasing Shared Memory Size](#increasing-shared-memory-size) section
-              for more details.
             - The `membarrier` system call is not blocked by Docker.  See the
               [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
               for more details.
@@ -325,15 +307,3 @@ container:
   devices:
     - path: /dev/snd
       description: Optional Linux device to expose to have sound.
-
-  # Extra parameters
-  extra_params:
-    - name: shm-size
-      value: 2g
-      description: >-
-        Set the size of `/dev/shm` to `VALUE`.  The format of `VALUE` is
-        `<number><unit>`, where `number` must be greater than `0` and `unit`
-        can be `b` (bytes), `k` (kilobytes), `m` (megabytes), or `g`
-        (gigabytes).  **NOTE**: To avoid crashes, it is recommended to set this
-        value to `2g`.
-      include_in_quick_start: true

@@ -1,2 +1,0 @@
-#!/bin/sh
-echo "$APP_NAME is likely to crash because of the lack of shared memory.  Size of shared memory needs to be increased.  See the documentation of the Docker container to find out how this can be done."

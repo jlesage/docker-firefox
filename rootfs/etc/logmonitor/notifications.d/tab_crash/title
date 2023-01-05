@@ -1,2 +1,0 @@
-#!/bin/sh
-echo "$APP_NAME lacks of shared memory."
