@@ -476,7 +476,7 @@ docker exec -ti CONTAINER sh
 ```
 
 Where `CONTAINER` is the ID or the name of the container used during its
-creation (e.g. `crashplan-pro`).
+creation.
 
 ## Increasing Shared Memory Size
 
