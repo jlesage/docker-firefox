@@ -1,2 +1,0 @@
-#!/bin/sh
-echo "$APP_NAME is likely to crash because it requires the membarrier system call.  See the documentation of this Docker container to find out how this system call can be allowed."

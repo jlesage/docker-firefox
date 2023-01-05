@@ -17,13 +17,6 @@ fi
 # Copy default preferences.
 [ -f /config/profile/prefs.js ] || cp /defaults/prefs.js /config/profile/prefs.js
 
-if /usr/bin/membarrier_check 2>/dev/null; then
-   echo 'MEMBARRIER_CHECK_PASS' > /tmp/.firefox_membarrier_check
-else
-   echo 'MEMBARRIER_CHECK_FAIL' > /tmp/.firefox_membarrier_check
-fi
-chown $USER_ID:$GROUP_ID /tmp/.firefox_membarrier_check
-
 # Clean/optimize Firefox databases.
 #if [ -d /config/.mozilla/firefox ] && [ -d /config/profile ]; then
 #    [ -f /config/.mozilla/firefox/profiles.ini ] || cp /defaults/profiles.ini /config/.mozilla/firefox/

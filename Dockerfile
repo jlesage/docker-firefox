@@ -101,11 +101,6 @@ RUN \
 #    del-pkg build-dependencies && \
 #    rm -rf /tmp/* /tmp/.[!.]*
 
-# Enable log monitoring.
-RUN \
-    sed-patch 's|LOG_FILES=|LOG_FILES=/config/log/firefox/error.log|' /etc/logmonitor/logmonitor.conf && \
-    sed-patch 's|STATUS_FILES=|STATUS_FILES=/tmp/.firefox_shm_check,/tmp/.firefox_membarrier_check|' /etc/logmonitor/logmonitor.conf
-
 # Generate and install favicons.
 RUN \
     APP_ICON_URL=https://github.com/jlesage/docker-templates/raw/master/jlesage/images/firefox-icon.png && \
