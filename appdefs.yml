@@ -101,6 +101,15 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.01.1
+      date: 2023-01-04
+      changes:
+        - 'Updated Firefox to version 108.0.1-r1.'
+        - 'Update of the baseimage to version 4.3.1 brings the following changes:'
+        - '2:Control menu can be moved to the right side of the screen.'
+        - '2:Automatic focus of the clipboard text box when opening the control menu.'
+        - '2:Automatic close of the control menu when clicking into the application.'
+        - '2:Rotation of the internal web server log files.'
     - version: 22.12.2
       date: 2022-12-11
       changes:
