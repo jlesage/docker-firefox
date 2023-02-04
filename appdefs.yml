@@ -289,7 +289,6 @@ app:
         - 'Initial release.'
 
 container:
-  rough_download_size: 160MB
   unsupported_volume: /storage
 
   # Environment variables.
