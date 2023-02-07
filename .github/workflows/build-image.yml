@@ -121,6 +121,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: ${{ steps.prep.outputs.is_release == 'yes' }}
+          provenance: false
           platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.prep.outputs.tags }}
           build-args: |
