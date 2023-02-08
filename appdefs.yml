@@ -101,6 +101,12 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.02.2
+      date: 2023-02-08
+      changes:
+        - 'Updated baseimage to version 4.3.4, which brings the following changes:'
+        - '2:Fixed error message from openbox about missing Fontconfig cache directory.'
+        - 'Do not use the OCI Docker image format yet to keep better compatibility (e.g with older docker clients).'
     - version: 23.02.1
       date: 2023-02-04
       changes:
