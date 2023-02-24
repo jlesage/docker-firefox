@@ -144,11 +144,12 @@ Removing environment variables that are not needed provides some advantages:
     the container.  Some undocumented variables, like `PATH` or `ENV`, are
     required to be exposed, but are not meant to be changed by users.  However,
     container management tools still show these variables to users.
-  - There is a bug with the Container Station on QNAP, where the value of an
-    environment variable is mandatory.  This behavior is wrong and it's
-    perfectly fine to have a variable without value.  In fact, this container
-    does have variables without value by default.  Thus, removing uneeded
-    variables is a good way to prevent deployment issue on QNAP.
+  - There is a bug with the Container Station on QNAP and the Docker application
+    on Synology, where an environment variable without value might not be
+    allowed.  This behavior is wrong: it's absolutely fine to have a variable
+    without value.  In fact, this container does have variables without value by
+    default.  Thus, removing uneeded variables is a good way to prevent
+    deployment issue on these devices.
 
 ### Data Volumes
 
