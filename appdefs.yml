@@ -105,7 +105,7 @@ app:
       date: 2023-03-05
       changes:
         - 'Updated baseimage to version 4.4.0, which brings the following changes:'
-        - '2:Updated components providing access to application's UI over web.'
+        - '2:Updated components providing access to application''s UI over web.'
         - '2:Improved web UI usage with touch devices.'
         - '2:Fixed issue with initialization of Linux users and groups when the `GROUP_ID` is also part of `SUP_GROUP_IDS`.'
     - version: 23.02.3
