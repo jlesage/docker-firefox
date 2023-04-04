@@ -42,3 +42,5 @@ do
         echo "user_pref(\"$PNAME\", $PVAL);" >> "$PREF_FILE"
     fi
 done
+
+# vim:ft=sh:ts=4:sw=4:et:sts=4

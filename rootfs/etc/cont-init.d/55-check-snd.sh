@@ -14,4 +14,4 @@ fi
 SND_GRP="$(find "$SND_DEV" -maxdepth 1 -not -type d -exec stat -c "%g" {} \; | sort -u | tail -n1)"
 echo "sound device group $SND_GRP."
 
-# vim: set ft=sh :
+# vim:ft=sh:ts=4:sw=4:et:sts=4
