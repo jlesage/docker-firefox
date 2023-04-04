@@ -65,6 +65,8 @@ RUN \
 # Install extra packages.
 RUN \
     add-pkg \
+        # WebGL support.
+        mesa-dri-gallium \
         # Icons used by folder/file selection window (when saving as).
         adwaita-icon-theme \
         # A font is needed.
