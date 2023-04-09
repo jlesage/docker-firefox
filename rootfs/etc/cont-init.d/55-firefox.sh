@@ -23,29 +23,6 @@ fi
 #    env HOME=/config /usr/bin/profile-cleaner f
 #fi
 
-# Fix window display size is session stores.
-if [ -n "$(ls /config/profile/sessionstore-backups/*.jsonlz4 2>/dev/null)" ]; then
-    for FILE in /config/profile/sessionstore-backups/*.jsonlz4; do
-        WORKDIR="$(mktemp -d)"
-
-        dejsonlz4 "$FILE" "$WORKDIR"/json
-        cp "$WORKDIR"/json "$WORKDIR"/json.orig
-
-        sed -i 's/"width":[0-9]\+/"width":'$DISPLAY_WIDTH'/' "$WORKDIR"/json
-        sed -i 's/"height":[0-9]\+/"height":'$DISPLAY_HEIGHT'/' "$WORKDIR"/json
-        sed -i 's/"screenX":[0-9]\+/"screenX":0/' "$WORKDIR"/json
-        sed -i 's/"screenY":[0-9]\+/"screenY":0/' "$WORKDIR"/json
-
-        if ! diff "$WORKDIR"/json "$WORKDIR"/json.orig >/dev/null; then
-            jsonlz4 "$WORKDIR"/json "$WORKDIR"/jsonlz4
-            mv "$WORKDIR"/jsonlz4 "$FILE"
-            echo "fixed display size in $FILE."
-        fi
-
-        rm -r "$WORKDIR"
-    done
-fi
-
 # Initialize log files.
 for LOG_FILE in /config/log/firefox/output.log /config/log/firefox/error.log
 do
