@@ -51,13 +51,6 @@ RUN \
     find /usr/share/icons/Adwaita -type d -mindepth 1 -maxdepth 1 -not -name 16x16 -not -name scalable -exec rm -rf {} ';' && \
     true
 
-# Set default settings.
-RUN \
-    CFG_FILE="/usr/lib/firefox/browser/defaults/preferences/firefox-branding.js" && \
-    echo '// Default download directory.' >> "$CFG_FILE" && \
-    echo 'pref("browser.download.dir", "/config/downloads");' >> "$CFG_FILE" && \
-    echo 'pref("browser.download.folderList", 2);' >> "$CFG_FILE"
-
 # Install profile-cleaner.
 #RUN \
 #    add-pkg --virtual build-dependencies curl && \

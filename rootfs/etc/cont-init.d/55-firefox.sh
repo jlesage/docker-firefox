@@ -14,9 +14,6 @@ if [ ! -f /config/machine-id ]; then
     cat /proc/sys/kernel/random/uuid | tr -d '-' > /config/machine-id
 fi
 
-# Copy default preferences.
-[ -f /config/profile/prefs.js ] || cp /defaults/prefs.js /config/profile/prefs.js
-
 # Clean/optimize Firefox databases.
 #if [ -d /config/.mozilla/firefox ] && [ -d /config/profile ]; then
 #    [ -f /config/.mozilla/firefox/profiles.ini ] || cp /defaults/profiles.ini /config/.mozilla/firefox/
