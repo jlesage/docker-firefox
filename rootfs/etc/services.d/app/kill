@@ -1,14 +1,25 @@
 #!/bin/sh
 #
-# When receiving SIGTERM, Firefox doesn't qui immediately and instead ask for
-# confirmation.  Instead, terminate Firefox by sending the CTRL+q key presses.
+# Firefox doesn't gracefully shutdown when receiving SIGTERM.  For example, last
+# opened tabs may not be saved.  Instead, terminate Firefox by sending the
+# CTRL+q key presses.
 #
 
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
 
 xdotool key "Escape"
+sleep 0.5
 xdotool key "ctrl+q"
+
+for i in $(seq 1 10)
+do
+    if ! ps | grep "/usr/lib/firefox/firefox" | grep -q -v grep
+    then
+        break
+    fi
+    sleep 0.5
+done
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4
 
