@@ -147,7 +147,7 @@ jobs:
     name: Notification
     needs: [ build ]
     runs-on: ubuntu-20.04
-    if: ${{ always() }}
+    if: ${{ always() && github.event_name != 'pull_request' }}
 
     steps:
       - name: Pushover notification
