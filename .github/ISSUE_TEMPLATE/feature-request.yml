@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an idea for this project.
+title: "[Feature request] Provide a short description of the feature here"
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an idea to make this project better.
+  - type: textarea
+    attributes:
+      label: Idea
+      description: |
+        Please describe the desired behavior, pitch your idea, or suggest improvements.
+    validations:
+      required: true

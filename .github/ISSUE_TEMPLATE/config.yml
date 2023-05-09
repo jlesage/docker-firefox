@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question, discuss
+    url: https://github.com/jlesage/docker-firefox/discussions
+    about: Get help using this Docker container.
+  - name: Documentation
+    url: https://github.com/jlesage/docker-firefox#readme
+    about: Documentation about this Docker container.
