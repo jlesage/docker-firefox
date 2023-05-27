@@ -1,4 +1,4 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: Ask a question, discuss
     url: https://github.com/jlesage/docker-firefox/discussions
