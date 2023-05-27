@@ -101,6 +101,10 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.05.2
+      date: 2023-05-27
+      changes:
+        - 'Updated Firefox to version 113.0.2-r1.'
     - version: 23.05.1
       date: 2023-05-19
       changes:
