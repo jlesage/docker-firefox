@@ -133,7 +133,7 @@ While this can be useful for the user to adjust the value of environment
 variables to fit its needs, it can also be confusing and dangerous to keep all
 of them.
 
-A good pratice is to set/keep only the variables that are needed for the
+A good practice is to set/keep only the variables that are needed for the
 container to behave as desired in a specific setup.  If the value of variable is
 kept to its default value, it means that it can be removed.  Keep in mind that
 all variables are optional, meaning that none of them is required for the
@@ -154,7 +154,7 @@ Removing environment variables that are not needed provides some advantages:
     on Synology, where an environment variable without value might not be
     allowed.  This behavior is wrong: it's absolutely fine to have a variable
     without value.  In fact, this container does have variables without value by
-    default.  Thus, removing uneeded variables is a good way to prevent
+    default.  Thus, removing unneeded variables is a good way to prevent
     deployment issue on these devices.
 
 ### Data Volumes
