@@ -101,6 +101,11 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.06.1
+      date: 2023-06-24
+      changes:
+        - 'Updated Firefox to version 114.0.2-r0.'
+        - 'Fixed issue caused by the presence slash or backslash characters in Firefox preference's value set via environment variable.'
     - version: 23.05.2
       date: 2023-05-27
       changes:
