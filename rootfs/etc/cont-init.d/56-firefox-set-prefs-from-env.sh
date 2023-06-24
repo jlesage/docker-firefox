@@ -36,7 +36,7 @@ do
         sed -i "/user_pref(\"$PNAME\",.*);/d" "$PREF_FILE"
     elif grep -q "user_pref(\"$PNAME\"," "$PREF_FILE"; then
         echo "Setting preference '$PNAME'..."
-        sed -i "s/user_pref(\"$PNAME\",.*);/user_pref(\"$PNAME\", $PVAL);/" "$PREF_FILE"
+        sed -i "s/user_pref(\"$PNAME\",.*);/user_pref(\"$PNAME\", $(echo "$PVAL" | sed 's|/|\\/|g'));/" "$PREF_FILE"
     else
         echo "Setting new preference '$PNAME'..."
         echo "user_pref(\"$PNAME\", $PVAL);" >> "$PREF_FILE"
