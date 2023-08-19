@@ -23,8 +23,9 @@ Foundation and its subsidiary, Mozilla Corporation.
 
 ## Quick Start
 
-**NOTE**: The Docker command provided in this quick start is given as an example
-and parameters should be adjusted to your need.
+**NOTE**:
+    The Docker command provided in this quick start is given as an example
+    and parameters should be adjusted to your need.
 
 Launch the Firefox docker container with the following command:
 ```shell
@@ -36,6 +37,7 @@ docker run -d \
 ```
 
 Where:
+
   - `/docker/appdata/firefox`: This is where the application stores its configuration, states, log and any files needing persistency.
 
 Browse to `http://your-host-ip:5800` to access the Firefox GUI.
