@@ -12,6 +12,7 @@ app:
   name: firefox
   friendly_name: Firefox
   gui_type: x11
+  base_os: alpine
   project:
     description: |-
       Mozilla Firefox is a free and open-source web browser developed by Mozilla
