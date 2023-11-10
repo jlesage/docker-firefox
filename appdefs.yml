@@ -102,6 +102,16 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.11.2
+      date: 2023-11-10
+      changes:
+        - 'Updated baseimage to version 4.5.1, which brings the following changes:'
+        - '2:Mirror for packages installation can be set via the `PACKAGES_MIRROR` environment variable.'
+        - '2:Improved the way the `take-ownership` script is working.'
+        - '2:Readiness and minimum running time checks should not be done for a service defined with an interval.'
+        - '2:Raise an error when a synched service fails to start.'
+        - '2:Minimum running time check of a service was using an incorrect way to verify if process is still alive.'
+        - '2:Fixed installation of CJK font.'
     - version: 23.11.1
       date: 2023-11-09
       changes:
