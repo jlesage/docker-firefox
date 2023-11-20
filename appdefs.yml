@@ -102,6 +102,11 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 23.11.3
+      date: 2023-11-19
+      changes:
+        - 'Updated baseimage to version 4.5.2, which brings the following changes:'
+        - '2:Fixed issue that would cause the helper that takes ownership of a directory to fail when using a very high user or group ID.'
     - version: 23.11.2
       date: 2023-11-10
       changes:
