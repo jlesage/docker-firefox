@@ -102,6 +102,13 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 24.01.1
+      date: 2024-01-20
+      changes:
+        - 'Updated Firefox to version 120.0.1-r0.'
+        - 'Updated baseimage to version 4.5.3, based on Alpine Linux 3.19, which brings the following changes:'
+        - '2:Disabled fullscreen support when page is loaded into an iFrame.'
+        - '2:Rebuilt against latest distro images to get security fixes.'
     - version: 23.11.3
       date: 2023-11-19
       changes:
