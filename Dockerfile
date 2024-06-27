@@ -40,6 +40,8 @@ RUN \
     add-pkg \
         # WebGL support.
         mesa-dri-gallium \
+        # Audio support.
+        libpulse \
         # Icons used by folder/file selection window (when saving as).
         adwaita-icon-theme \
         # A font is needed.
