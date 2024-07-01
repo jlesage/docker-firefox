@@ -20,3 +20,8 @@ fi
 if [ -n "${FF_OPEN_URL:-}" ]; then
     echo "$FF_OPEN_URL"
 fi
+
+# Custom arguments.
+if [ -n "${FF_CUSTOM_ARGS:-}" ]; then
+    eval 'for word in '$FF_CUSTOM_ARGS'; do echo "$word"; done'
+fi

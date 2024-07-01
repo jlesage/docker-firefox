@@ -395,6 +395,16 @@ container:
         customer-facing displays.
       type: public
       default: 0
+    - name: FF_CUSTOM_ARGS
+      description: >-
+        Custom argument(s) to pass when launching {{ app.friendly_name }}.
+      type: public
+      default: 0
+      unraid_template:
+        title: "Custom Arguments"
+        display: advanced
+        required: false
+        mask: false
 
   # Volumes
   volumes: []
