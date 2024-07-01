@@ -388,6 +388,11 @@ container:
       description: >-
         The URL to open when {{ app.friendly_name }} starts.
       type: public
+      unraid_template:
+        title: "Open URL"
+        display: advanced
+        required: false
+        mask: false
     - name: FF_KIOSK
       description: >-
         Set to `1` to enable kiosk mode.  This mode launches Firefox in a very
@@ -395,6 +400,15 @@ container:
         customer-facing displays.
       type: public
       default: 0
+      unraid_template:
+        title: "Kiosk Mode"
+        description: >-
+          Set to 1 to enable kiosk mode.  This mode launches Firefox in a very
+          restricted and limited mode best suitable for public areas or
+          customer-facing displays.
+        display: advanced
+        required: false
+        mask: false
     - name: FF_CUSTOM_ARGS
       description: >-
         Custom argument(s) to pass when launching {{ app.friendly_name }}.
