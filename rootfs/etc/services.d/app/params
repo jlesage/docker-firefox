@@ -11,7 +11,7 @@ echo "/config/profile"
 echo "--setDefaultBrowser"
 
 # Check if kiosk mode is enabled.
-if [ "${FF_KIOSK:-0}" == 1 ]; then
+if is-bool-val-true "${FF_KIOSK:-0}"; then
     echo "--kiosk"
 fi
 
