@@ -40,6 +40,8 @@ Foundation and its subsidiary, Mozilla Corporation.
       * [SSVNC](#ssvnc)
       * [Certificates](#certificates)
       * [VNC Password](#vnc-password)
+      * [Web Authentication](#web-authentication)
+         * [Configuring Users Credentials](#configuring-users-credentials)
    * [Reverse Proxy](#reverse-proxy)
       * [Routing Based on Hostname](#routing-based-on-hostname)
       * [Routing Based on URL Path](#routing-based-on-url-path)
@@ -85,15 +87,15 @@ docker run [-d] \
 
 | Parameter | Description |
 |-----------|-------------|
-| -d        | Run the container in the background.  If not set, the container runs in the foreground. |
-| -e        | Pass an environment variable to the container.  See the [Environment Variables](#environment-variables) section for more details. |
-| -v        | Set a volume mapping (allows to share a folder/file between the host and the container).  See the [Data Volumes](#data-volumes) section for more details. |
-| -p        | Set a network port mapping (exposes an internal container port to the host).  See the [Ports](#ports) section for more details. |
+| -d        | Run the container in the background. If not set, the container runs in the foreground. |
+| -e        | Pass an environment variable to the container. See the [Environment Variables](#environment-variables) section for more details. |
+| -v        | Set a volume mapping (allows to share a folder/file between the host and the container). See the [Data Volumes](#data-volumes) section for more details. |
+| -p        | Set a network port mapping (exposes an internal container port to the host). See the [Ports](#ports) section for more details. |
 
 ### Environment Variables
 
 To customize some properties of the container, the following environment
-variables can be passed via the `-e` parameter (one for each variable).  Value
+variables can be passed via the `-e` parameter (one for each variable). Value
 of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 
 | Variable       | Description                                  | Default |
@@ -112,6 +114,10 @@ of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 |`DISPLAY_WIDTH`| Width (in pixels) of the application's window. | `1920` |
 |`DISPLAY_HEIGHT`| Height (in pixels) of the application's window. | `1080` |
 |`DARK_MODE`| When set to `1`, dark mode is enabled for the application. | `0` |
+|`WEB_AUDIO`| When set to `1`, audio support is enabled, meaning that any audio produced by the application is played through the browser. Note that audio is not supported for VNC clients. | `0` |
+|`WEB_AUTHENTICATION`| When set to `1`, the application' GUI is protected via a login page when accessed via a web browser.  Access is allowed only when providing valid credentials.  **NOTE**: This feature requires secure connection (`SECURE_CONNECTION` environment variable) to be enabled. | `0` |
+|`WEB_AUTHENTICATION_USERNAME`| Optional username to configure for the web authentication.  This is a quick and easy way to configure credentials for a single user.  To configure credentials in a more secure way, or to add more users, see the [Web Authentication](#web-authentication) section. | (no value) |
+|`WEB_AUTHENTICATION_PASSWORD`| Optional password to configure for the web authentication.  This is a quick and easy way to configure credentials for a single user.  To configure credentials in a more secure way, or to add more users, see the [Web Authentication](#web-authentication) section. | (no value) |
 |`SECURE_CONNECTION`| When set to `1`, an encrypted connection is used to access the application's GUI (either via a web browser or VNC client).  See the [Security](#security) section for more details. | `0` |
 |`SECURE_CONNECTION_VNC_METHOD`| Method used to perform the secure VNC connection.  Possible values are `SSL` or `TLS`.  See the [Security](#security) section for more details. | `SSL` |
 |`SECURE_CONNECTION_CERTS_CHECK_INTERVAL`| Interval, in seconds, at which the system verifies if web or VNC certificates have changed.  When a change is detected, the affected services are automatically restarted.  A value of `0` disables the check. | `60` |
@@ -121,11 +127,12 @@ of this parameter has the format `<VARIABLE_NAME>=<VALUE>`.
 |`ENABLE_CJK_FONT`| When set to `1`, open-source computer font `WenQuanYi Zen Hei` is installed.  This font contains a large range of Chinese/Japanese/Korean characters. | `0` |
 |`FF_OPEN_URL`| The URL to open when Firefox starts. | (no value) |
 |`FF_KIOSK`| Set to `1` to enable kiosk mode.  This mode launches Firefox in a very restricted and limited mode best suitable for public areas or customer-facing displays. | `0` |
+|`FF_CUSTOM_ARGS`| Custom argument(s) to pass when launching Firefox. | `0` |
 
 #### Deployment Considerations
 
 Many tools used to manage Docker containers extract environment variables
-defined by the Docker image and use them to create/deploy the container.  For
+defined by the Docker image and use them to create/deploy the container. For
 example, this is done by:
   - The Docker application on Synology NAS
   - The Container Station on QNAP NAS
@@ -137,33 +144,33 @@ variables to fit its needs, it can also be confusing and dangerous to keep all
 of them.
 
 A good practice is to set/keep only the variables that are needed for the
-container to behave as desired in a specific setup.  If the value of variable is
-kept to its default value, it means that it can be removed.  Keep in mind that
+container to behave as desired in a specific setup. If the value of variable is
+kept to its default value, it means that it can be removed. Keep in mind that
 all variables are optional, meaning that none of them is required for the
 container to start.
 
 Removing environment variables that are not needed provides some advantages:
 
-  - Prevents keeping variables that are no longer used by the container.  Over
+  - Prevents keeping variables that are no longer used by the container. Over
     time, with image updates, some variables might be removed.
-  - Allows the Docker image to change/fix a default value.  Again, with image
+  - Allows the Docker image to change/fix a default value. Again, with image
     updates, the default value of a variable might be changed to fix an issue,
     or to better support a new feature.
   - Prevents changes to a variable that might affect the correct function of
-    the container.  Some undocumented variables, like `PATH` or `ENV`, are
-    required to be exposed, but are not meant to be changed by users.  However,
+    the container. Some undocumented variables, like `PATH` or `ENV`, are
+    required to be exposed, but are not meant to be changed by users. However,
     container management tools still show these variables to users.
   - There is a bug with the Container Station on QNAP and the Docker application
     on Synology, where an environment variable without value might not be
-    allowed.  This behavior is wrong: it's absolutely fine to have a variable
-    without value.  In fact, this container does have variables without value by
-    default.  Thus, removing unneeded variables is a good way to prevent
+    allowed. This behavior is wrong: it's absolutely fine to have a variable
+    without value. In fact, this container does have variables without value by
+    default. Thus, removing unneeded variables is a good way to prevent
     deployment issue on these devices.
 
 ### Data Volumes
 
-The following table describes data volumes used by the container.  The mappings
-are set via the `-v` parameter.  Each mapping is specified with the following
+The following table describes data volumes used by the container. The mappings
+are set via the `-v` parameter. Each mapping is specified with the following
 format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
 
 | Container path  | Permissions | Description |
@@ -175,8 +182,8 @@ format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
 Here is the list of ports used by the container.
 
 When using the default bridge network, ports can be mapped to the host via the
-`-p` parameter (one per port mapping).  Each mapping is defined with the
-following format: `<HOST_PORT>:<CONTAINER_PORT>`.  The port number used inside
+`-p` parameter (one per port mapping). Each mapping is defined with the
+following format: `<HOST_PORT>:<CONTAINER_PORT>`. The port number used inside
 the container might not be changeable, but you are free to use any port on the
 host side.
 
@@ -194,7 +201,7 @@ As can be seen, environment variables, volume and port mappings are all specifie
 while creating the container.
 
 The following steps describe the method used to add, remove or update
-parameter(s) of an existing container.  The general idea is to destroy and
+parameter(s) of an existing container. The general idea is to destroy and
 re-create the container:
 
   1. Stop the container (if it is running):
@@ -221,7 +228,7 @@ docker rm firefox
 Here is an example of a `docker-compose.yml` file that can be used with
 [Docker Compose](https://docs.docker.com/compose/overview/).
 
-Make sure to adjust according to your needs.  Note that only mandatory network
+Make sure to adjust according to your needs. Note that only mandatory network
 ports are part of the example.
 
 ```yaml
@@ -237,11 +244,11 @@ services:
 
 ## Docker Image Versioning
 
-Each release of a Docker image is versioned.  Prior to october 2022, the
+Each release of a Docker image is versioned. Prior to october 2022, the
 [semantic versioning](https://semver.org) was used as the versioning scheme.
 
 Since then, versioning scheme changed to
-[calendar versioning](https://calver.org).  The format used is `YY.MM.SEQUENCE`,
+[calendar versioning](https://calver.org). The format used is `YY.MM.SEQUENCE`,
 where:
   - `YY` is the zero-padded year (relative to year 2000).
   - `MM` is the zero-padded month.
@@ -252,10 +259,10 @@ where:
 
 Because features are added, issues are fixed, or simply because a new version
 of the containerized application is integrated, the Docker image is regularly
-updated.  Different methods can be used to update the Docker image.
+updated. Different methods can be used to update the Docker image.
 
 The system used to run the container may have a built-in way to update
-containers.  If so, this could be your primary way to update Docker images.
+containers. If so, this could be your primary way to update Docker images.
 
 An other way is to have the image be automatically updated with [Watchtower].
 Watchtower is a container-based solution for automating Docker image updates.
@@ -293,12 +300,12 @@ container image.
   2.  Click on *Registry* in the left pane.
   3.  In the search bar, type the name of the container (`jlesage/firefox`).
   4.  Select the image, click *Download* and then choose the `latest` tag.
-  5.  Wait for the download to complete.  A  notification will appear once done.
+  5.  Wait for the download to complete. A notification will appear once done.
   6.  Click on *Container* in the left pane.
   7.  Select your Firefox container.
   8.  Stop it by clicking *Action*->*Stop*.
   9.  Clear the container by clicking *Action*->*Reset* (or *Action*->*Clear* if
-      you don't have the latest *Docker* application).  This removes the
+      you don't have the latest *Docker* application). This removes the
       container while keeping its configuration.
   10. Start the container again by clicking *Action*->*Start*. **NOTE**:  The
       container may temporarily disappear from the list while it is re-created.
@@ -314,8 +321,8 @@ For unRAID, a container image can be updated by following these steps:
 ## User/Group IDs
 
 When using data volumes (`-v` flags), permissions issues can occur between the
-host and the container.  For example, the user within the container may not
-exist on the host.  This could prevent the host from properly accessing files
+host and the container. For example, the user within the container may not
+exist on the host. This could prevent the host from properly accessing files
 and folders on the shared volume.
 
 To avoid any problem, you can specify the user the application should run as.
@@ -359,15 +366,15 @@ By default, access to the application's GUI is done over an unencrypted
 connection (HTTP or VNC).
 
 Secure connection can be enabled via the `SECURE_CONNECTION` environment
-variable.  See the [Environment Variables](#environment-variables) section for
+variable. See the [Environment Variables](#environment-variables) section for
 more details on how to set an environment variable.
 
 When enabled, application's GUI is performed over an HTTPs connection when
-accessed with a browser.  All HTTP accesses are automatically redirected to
+accessed with a browser. All HTTP accesses are automatically redirected to
 HTTPs.
 
-When using a VNC client, the VNC connection is performed over SSL.  Note that
-few VNC clients support this method.  [SSVNC] is one of them.
+When using a VNC client, the VNC connection is performed over SSL. Note that
+few VNC clients support this method. [SSVNC] is one of them.
 
 [SSVNC]: http://www.karlrunge.com/x11vnc/ssvnc.html
 
@@ -376,7 +383,7 @@ few VNC clients support this method.  [SSVNC] is one of them.
 [SSVNC] is a VNC viewer that adds encryption security to VNC connections.
 
 While the Linux version of [SSVNC] works well, the Windows version has some
-issues.  At the time of writing, the latest version `1.0.30` is not functional,
+issues. At the time of writing, the latest version `1.0.30` is not functional,
 as a connection fails with the following error:
 ```text
 ReadExact: Socket error while reading
@@ -392,8 +399,8 @@ problems.
 
 ### Certificates
 
-Here are the certificate files needed by the container.  By default, when they
-are missing, self-signed certificates are generated and used.  All files have
+Here are the certificate files needed by the container. By default, when they
+are missing, self-signed certificates are generated and used. All files have
 PEM encoded, x509 certificates.
 
 | Container Path                  | Purpose                    | Content |
@@ -412,7 +419,7 @@ PEM encoded, x509 certificates.
 
 ### VNC Password
 
-To restrict access to your application, a password can be specified.  This can
+To restrict access to your application, a password can be specified. This can
 be done via two methods:
   * By using the `VNC_PASSWORD` environment variable.
   * By creating a `.vncpass_clear` file at the root of the `/config` volume.
@@ -427,10 +434,54 @@ When using a VNC password, it is highly desirable to enable the secure
 connection to prevent sending the password in clear over an unencrypted channel.
 
 **ATTENTION**:
-    Password is limited to 8 characters.  This limitation comes from
+    Password is limited to 8 characters. This limitation comes from
     the Remote Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143)
     (see section [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)).
     Any characters beyond the limit are ignored.
+
+### Web Authentication
+
+Access to the application's GUI via a web browser can be protected with a login
+page. When web authentication is enabled, users have to provide valid
+credentials, otherwise access is denied.
+
+Web authentication can be enabled by setting the `WEB_AUTHENTICATION`
+environment variable to `1`.
+
+See the [Environment Variables](#environment-variables) section for more details
+on how to set an environment variable.
+
+**NOTE**: Secure connection must be also enabled to use web authentication.
+          See the [Security](#security) section for more details.
+
+#### Configuring Users Credentials
+
+Two methods can be used to configure users credentials:
+
+  1. Via container environment variables.
+  2. Via password database.
+
+Containers environment variables can be used to quickly and easily configure
+a single user. Username and pasword are defined via the following environment
+variables:
+  - `WEB_AUTHENTICATION_USERNAME`
+  - `WEB_AUTHENTICATION_PASSWORD`
+
+See the [Environment Variables](#environment-variables) section for more details
+on how to set an environment variable.
+
+The second method is more secure and allows multiple users to be configured.
+The usernames and password hashes are saved into a password database, located at
+`/config/webauth-htpasswd` inside the container. This database file has the
+same format as htpasswd files of the Apache HTTP server. Note that password
+themselves are not saved into the database, but only their hash. The bcrypt
+password hashing function is used to generate hashes.
+
+Users are managed via the `webauth-user` tool included in the container:
+  - To add a user password: `docker exec -ti <container name or id> webauth-user add <username>`.
+  - To update a user password: `docker exec -ti <container name or id> webauth-user update <username>`.
+  - To remove a user: `docker exec <container name or id> webauth-user del <username>`.
+  - To list users: `docker exec <container name or id> webauth-user user`.
 
 ## Reverse Proxy
 
@@ -445,7 +496,7 @@ path.
 In this scenario, each hostname is routed to a different application/container.
 
 For example, let's say the reverse proxy server is running on the same machine
-as this container.  The server would proxy all HTTP requests sent to
+as this container. The server would proxy all HTTP requests sent to
 `firefox.domain.tld` to the container at `127.0.0.1:5800`.
 
 Here are the relevant configuration elements that would be added to the NGINX
@@ -491,7 +542,7 @@ In this scenario, the hostname is the same, but different URL paths are used to
 route to different applications/containers.
 
 For example, let's say the reverse proxy server is running on the same machine
-as this container.  The server would proxy all HTTP requests for
+as this container. The server would proxy all HTTP requests for
 `server.domain.tld/firefox` to the container at `127.0.0.1:5800`.
 
 Here are the relevant configuration elements that would be added to the NGINX
