@@ -102,6 +102,18 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 24.07.1
+      date: 2024-07-02
+      changes:
+        - 'Updated Firefox to version 126.0.1-r0.'
+        - 'Updated baseimage to version 4.6.3, which brings the following changes:'
+        - '2:Audio support through web browser.'
+        - '2:Web authentication support.'
+        - '2:Better support of GTK4 applications.'
+        - '2:Updated noVNC to version 1.5.0.'
+        - '2:Updated web UI components (Bootstrap, Font Awesome).'
+        - '2:When connecting, the control bar is now temporarily shown only once.'
+        - '2:During package mirror setup, make sure to keep permissions of copied files.'
     - version: 24.05.1
       date: 2024-05-02
       changes:
