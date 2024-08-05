@@ -17,7 +17,7 @@ app:
     description: |-
       Mozilla Firefox is a free and open-source web browser developed by Mozilla
       Foundation and its subsidiary, Mozilla Corporation.
-    url: https://www.mozilla.org/en-US/firefox/
+    url: https://www.mozilla.org/firefox/
   unraid:
     support_url: https://forums.unraid.net/topic/69440-support-firefox/
     category: "Tools:"
