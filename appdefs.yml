@@ -105,7 +105,7 @@ app:
     - version: 24.09.1
       date: 2024-09-29
       changes:
-        - 'Updated Firefox to verison 130.0.1-r0.'
+        - 'Updated Firefox to version 130.0.1-r0.'
         - 'Updated baseimage to version 4.6.4, which brings the following changes:'
         - '2:Fixed web authentication feature with URL path-based reverse proxy.'
         - '2:Rebuild against latest distro images to get security fixes.'
