@@ -23,23 +23,15 @@ jobs:
 
     steps:
       - name: Free disk space
-        run: |
-          # Free disk space.
-          echo "::group::Before"
-          df -h /
-          echo "::endgroup::"
-          echo "::group::Removing unneeded softwares and files..."
-          for DIR in /usr/local/lib/android /usr/share/dotnet /opt/ghc
-          do
-            if [ -d "$DIR" ]; then
-                echo "Removing $DIR..."
-                sudo rm -r "$DIR"
-            fi
-          done
-          echo "::endgroup::"
-          echo "::group::After"
-          df -h /
-          echo "::endgroup::"
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
 
       - name: Prepare
         id: prep
