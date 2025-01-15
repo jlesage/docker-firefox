@@ -533,9 +533,28 @@ server {
 		proxy_set_header Connection $connection_upgrade;
 		proxy_read_timeout 86400;
 	}
+	# Required for audio forwarding, requires docker env WEB_AUDIO=1
+	location /websockify-audio {
+		proxy_pass http://docker-firefox;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection $connection_upgrade;
+		proxy_read_timeout 86400;
+	}
 }
-
 ```
+
+And for Apache, the following config lines need to be added to a virtual host:
+
+```apacheconf
+ProxyPass / http://127.0.0.1:5800/
+ProxyPassReverse / http://127.0.0.1:5800/
+ProxyPass /websockify "ws://127.0.0.1:5800/websockify" upgrade=websocket
+# Required for audio forwarding, requires docker env WEB_AUDIO=1
+ProxyPass /websockify-audio "ws://127.0.0.1:5800/websockify-audio" upgrade=websocket
+```
+
+
 
 ### Routing Based on URL Path
 
@@ -579,10 +598,28 @@ server {
 			proxy_set_header Connection $connection_upgrade;
 			proxy_read_timeout 86400;
 		}
+		# Required for audio forwarding, requires docker env WEB_AUDIO=1
+		location /firefox/websockify-audio {
+			proxy_pass http://docker-firefox/websockify-audio/;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection $connection_upgrade;
+			proxy_read_timeout 86400;
+		}
 	}
 }
-
 ```
+
+And for Apache, the following config lines need to be added to a virtual host:
+
+```apacheconf
+ProxyPass /firefox/ http://127.0.0.1:5800/
+ProxyPassReverse /firefox/ http://127.0.0.1:5800/
+ProxyPass /firefox/websockify "ws://127.0.0.1:5800/websockify" upgrade=websocket
+# Required for audio forwarding, requires docker env WEB_AUDIO=1
+ProxyPass /firefox/websockify-audio "ws://127.0.0.1:5800/websockify-audio" upgrade=websocket
+```
+
 ## Shell Access
 
 To get shell access to the running container, execute the following command:
