@@ -102,6 +102,15 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.02.1
+      date: 2025-02-09
+      changes:
+        - 'Updated Firefox to version 134.0-r0.'
+        - 'Updated baseimage to version 4.7.1, which brings the following changes (since last used version):'
+        - '2:Added environment variable that allows configuring the web authentication token lifetime.'
+        - '2:Fixed compatibility issues that were introduced with support of GTK4 applications.'
+        - '2:Increased the default service ready timeout from 5 seconds to 10 seconds and allow runtime adjustment via environment variable.'
+        - '2:Rebuild against latest distro images to get security fixes.'
     - version: 24.12.1
       date: 2024-12-07
       changes:
