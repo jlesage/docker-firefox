@@ -102,6 +102,11 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.06.2
+      date: 2025-06-25
+      changes:
+        - 'Updated baseimage to version 4.8.1, which brings the following changes:'
+        - '2:Fixed crash with some binaries on systems using old kernel.'
     - version: 25.06.1
       date: 2025-06-20
       changes:
