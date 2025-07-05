@@ -102,6 +102,12 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.07.1
+      date: 2025-07-05
+      changes:
+        - 'Updated baseimage to version 4.8.2, which brings the following changes:'
+        - '2:Fixed automatic reconnect of the web interface when web authentication is enabled.'
+        - '2:Fixed some resources that could not be accessed behind a reverse proxy based on URL path.'
     - version: 25.06.2
       date: 2025-06-25
       changes:
