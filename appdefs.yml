@@ -473,10 +473,14 @@ container:
   environment_variables:
     - name: FF_OPEN_URL
       description: >-
-        The URL to open when {{ app.friendly_name }} starts.
+        The URL to open when {{ app.friendly_name }} starts. Multiple URLs can
+        be opened by separating them with the pipe character (`|`).
       type: public
       unraid_template:
         title: "Open URL"
+        description: >-
+          The URL to open when {{ app.friendly_name }} starts. Multiple URLs can
+          be opened by separating them with the pipe character ('|').
         display: advanced
         required: false
         mask: false

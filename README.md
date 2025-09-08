@@ -132,7 +132,7 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`VNC_LISTENING_PORT`| Port used by the VNC server to serve the application's GUI. This port is internal to the container and typically does not need to be changed. By default, a container uses the default bridge network, requiring each internal port to be mapped to an external port (using the `-p` or `--publish` argument). If another network type is used, changing this port may prevent conflicts with other services/containers. **NOTE**: A value of `-1` disables VNC access to the application's GUI. | `5900` |
 |`VNC_PASSWORD`| Password required to connect to the application's GUI. See the [VNC Password](#vnc-password) section for details. | (no value) |
 |`ENABLE_CJK_FONT`| When set to `1`, installs the open-source font `WenQuanYi Zen Hei`, supporting a wide range of Chinese/Japanese/Korean characters. | `0` |
-|`FF_OPEN_URL`| The URL to open when Firefox starts. | (no value) |
+|`FF_OPEN_URL`| The URL to open when Firefox starts. Multiple URLs can be opened by separating them with the pipe character (`|`). | (no value) |
 |`FF_KIOSK`| Set to `1` to enable kiosk mode.  This mode launches Firefox in a very restricted and limited mode best suitable for public areas or customer-facing displays. | `0` |
 |`FF_CUSTOM_ARGS`| Custom argument(s) to pass when launching Firefox. | `0` |
 

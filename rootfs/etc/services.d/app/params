@@ -15,13 +15,13 @@ if is-bool-val-true "${FF_KIOSK:-0}"; then
     echo "--kiosk"
 fi
 
-# URL to open.
-# NOTE: This should be the last argument.
-if [ -n "${FF_OPEN_URL:-}" ]; then
-    echo "$FF_OPEN_URL"
-fi
-
 # Custom arguments.
 if [ -n "${FF_CUSTOM_ARGS:-}" ]; then
     eval 'for word in '$FF_CUSTOM_ARGS'; do echo "$word"; done'
+fi
+
+# URL to open.
+# NOTE: This should be the last argument.
+if [ -n "${FF_OPEN_URL:-}" ]; then
+    echo "$FF_OPEN_URL" | tr '|' '\n'
 fi
