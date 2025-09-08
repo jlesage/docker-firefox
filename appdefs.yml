@@ -102,6 +102,11 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.09.1
+      date: 2025-09-07
+      changes:
+        - 'Updated Firefox to version 142.0-r0.'
+        - 'Added support for multiple URLs defined by `FF_OPEN_URL`.'
     - version: 25.07.2
       date: 2025-07-26
       changes:
