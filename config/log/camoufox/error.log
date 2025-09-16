@@ -1,0 +1,24 @@
+2025-09-16 13:32:10,598 [INFO] Starting Camoufox persistent context
+Traceback (most recent call last):
+  File "/usr/local/bin/camoufox-launcher", line 261, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/bin/camoufox-launcher", line 257, in main
+    return _run_browser(options)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/bin/camoufox-launcher", line 206, in _run_browser
+    camoufox = Camoufox(persistent_context=True, args=args, env=env_map, **launch_options)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: camoufox.sync_api.Camoufox() got multiple values for keyword argument 'env'
+2025-09-16 13:42:18,431 [INFO] Starting Camoufox persistent context
+Traceback (most recent call last):
+  File "/usr/local/bin/camoufox-launcher", line 261, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/usr/local/bin/camoufox-launcher", line 257, in main
+    return _run_browser(options)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/bin/camoufox-launcher", line 206, in _run_browser
+    camoufox = Camoufox(persistent_context=True, args=args, env=env_map, **launch_options)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: camoufox.sync_api.Camoufox() got multiple values for keyword argument 'env'

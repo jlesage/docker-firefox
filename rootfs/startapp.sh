@@ -34,14 +34,15 @@ mkdir -p "$PLAYWRIGHT_BROWSERS_PATH"
 mkdir -p /config/log/camoufox
 
 # Make sure Camoufox binaries are available for the current architecture.
-if ! python3 -m camoufox path >/dev/null 2>&1; then
+CF_PATH="$(python3 -m camoufox path 2>/dev/null || true)"
+if [ ! -d "$CF_PATH" ] || [ -z "$(ls -A "$CF_PATH" 2>/dev/null)" ]; then
     if ! python3 -m camoufox fetch; then
         notify "Unable to install Camoufox." "Downloading Camoufox binaries failed. Check your network access and restart the container." "ERROR"
         exit 1
     fi
 fi
 
-python3 -m camoufox version
+python3 -m camoufox version || true
 exec /usr/local/bin/camoufox-launcher "$@" >> /config/log/camoufox/output.log 2>> /config/log/camoufox/error.log
 
 # vim:ft=sh:ts=4:sw=4:et:sts=4

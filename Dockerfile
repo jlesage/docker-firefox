@@ -53,6 +53,11 @@ RUN \
     python3 -m pip install --no-cache-dir --break-system-packages --upgrade pip && \
     python3 -m pip install --no-cache-dir --break-system-packages camoufox==${CAMOUFOX_PYPI_VERSION} && \
     python3 -m playwright install && \
+    # Pre-fetch Camoufox browser for the build architecture to speed up first run.
+    # If this fails (no network during build), runtime will fetch it.
+    python3 -m camoufox fetch || true && \
+    # Allow runtime user to fetch Browserforge models on first start.
+    chmod -R a+rwX /usr/local/lib/python3.11/dist-packages/browserforge || true && \
     rm -rf /root/.cache/pip
 
 # Install extra packages.
@@ -60,7 +65,9 @@ RUN \
     apt-get update && \
     # WebGL support, audio, icons, fonts, and automation helpers.
     apt-get install -y --no-install-recommends \
+        libgtk-3-0 \
         libgl1-mesa-dri \
+        libasound2 \
         libpulse0 \
         adwaita-icon-theme \
         fonts-dejavu-core \
@@ -97,6 +104,9 @@ RUN \
 # Add files.
 COPY rootfs/ /
 COPY --from=membarrier /tmp/membarrier_check /usr/bin/
+
+# Ensure init scripts are executable
+RUN chmod -R a+rx /etc/cont-init.d || true
 
 # Set internal environment variables.
 RUN \

@@ -186,6 +186,9 @@ def _collect_launch_options(cli_args: Sequence[str]) -> Dict[str, Any]:
 
     options["args"] = list(cli_args)
     options["env"] = dict(os.environ)
+    # Ensure persistent profile directory is used when launching a
+    # persistent context with Playwright.
+    options["user_data_dir"] = "/config/profile"
     return options
 
 
@@ -199,8 +202,22 @@ def _wait_for_context_close(context) -> None:
 def _run_browser(options: Dict[str, Any]) -> int:
     LOGGER.info("Starting Camoufox persistent context")
     launch_options = dict(options)
+    # Remove keys we pass explicitly to avoid duplication errors.
     launch_options.pop("args", None)  # args handled below to avoid duplication
+    launch_options.pop("env", None)   # env passed explicitly
     args = options.get("args", [])
+    # Remove any --profile flag that may be present from legacy params.
+    sanitized_args: List[str] = []
+    skip_next = False
+    for a in args:
+        if skip_next:
+            skip_next = False
+            continue
+        if a == "--profile":
+            skip_next = True
+            continue
+        sanitized_args.append(a)
+    args = sanitized_args
     env_map = options.get("env")
 
     camoufox = Camoufox(persistent_context=True, args=args, env=env_map, **launch_options)

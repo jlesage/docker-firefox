@@ -3,12 +3,12 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
 
-# Set location of profile used by Camoufox.
-echo "--profile"
-echo "/config/profile"
+#!/bin/sh
 
-# Make sure we don't get asked to be the default browser.
-echo "--setDefaultBrowser"
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+# Note: Do NOT set --profile here. Persistent context uses user_data_dir.
 
 # Check if kiosk mode is enabled.
 if is-bool-val-true "${FF_KIOSK:-0}"; then
