@@ -1,7 +1,7 @@
 #
-# firefox Dockerfile
+# Camoufox + Playwright Dockerfile
 #
-# https://github.com/jlesage/docker-firefox
+# https://github.com/batrapvd/docker-camoufox-playwright
 #
 
 # Build the membarrier check tool.
@@ -13,13 +13,13 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.22-v4.9.0
+FROM jlesage/baseimage-gui:debian-12-v4.9.0
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG FIREFOX_VERSION=142.0-r0
+ARG CAMOUFOX_PYPI_VERSION=0.4.11
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
@@ -28,27 +28,45 @@ ARG FIREFOX_VERSION=142.0-r0
 # Define working directory.
 WORKDIR /tmp
 
-# Install Firefox.
+# Avoid interactive prompts from apt.
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies.
 RUN \
-#    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-#            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-#            --upgrade firefox=${FIREFOX_VERSION}
-     add-pkg firefox=${FIREFOX_VERSION}
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        python3 \
+        python3-pip \
+    && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Camoufox and Playwright runtime.
+ENV \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright \
+    PIP_ROOT_USER_ACTION=ignore \
+    PIP_BREAK_SYSTEM_PACKAGES=1
+
+RUN \
+    mkdir -p "$PLAYWRIGHT_BROWSERS_PATH" && \
+    python3 -m pip install --no-cache-dir --break-system-packages --upgrade pip && \
+    python3 -m pip install --no-cache-dir --break-system-packages camoufox==${CAMOUFOX_PYPI_VERSION} && \
+    python3 -m playwright install && \
+    rm -rf /root/.cache/pip
 
 # Install extra packages.
 RUN \
-    add-pkg \
-        # WebGL support.
-        mesa-dri-gallium \
-        # Audio support.
-        libpulse \
-        # Icons used by folder/file selection window (when saving as).
+    apt-get update && \
+    # WebGL support, audio, icons, fonts, and automation helpers.
+    apt-get install -y --no-install-recommends \
+        libgl1-mesa-dri \
+        libpulse0 \
         adwaita-icon-theme \
-        # A font is needed.
-        font-dejavu \
-        # The following package is used to send key presses to the X process.
+        fonts-dejavu-core \
         xdotool \
-        && \
+    && \
+    rm -rf /var/lib/apt/lists/* && \
     # Remove unneeded icons.
     find /usr/share/icons/Adwaita -type d -mindepth 1 -maxdepth 1 -not -name 16x16 -not -name scalable -exec rm -rf {} ';' && \
     true
@@ -82,8 +100,8 @@ COPY --from=membarrier /tmp/membarrier_check /usr/bin/
 
 # Set internal environment variables.
 RUN \
-    set-cont-env APP_NAME "Firefox" && \
-    set-cont-env APP_VERSION "$FIREFOX_VERSION" && \
+    set-cont-env APP_NAME "Camoufox" && \
+    set-cont-env APP_VERSION "$CAMOUFOX_PYPI_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     true
 
@@ -95,8 +113,8 @@ ENV \
 
 # Metadata.
 LABEL \
-      org.label-schema.name="firefox" \
-      org.label-schema.description="Docker container for Firefox" \
+      org.label-schema.name="camoufox" \
+      org.label-schema.description="Docker container for Camoufox" \
       org.label-schema.version="${DOCKER_IMAGE_VERSION:-unknown}" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-firefox" \
+      org.label-schema.vcs-url="https://github.com/batrapvd/docker-camoufox-playwright" \
       org.label-schema.schema-version="1.0"
