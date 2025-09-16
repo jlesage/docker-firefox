@@ -1,0 +1,261 @@
+#!/usr/bin/env python3
+"""Launch Camoufox inside the container."""
+
+from __future__ import annotations
+
+import json
+import logging
+import os
+import signal
+import sys
+from typing import Any, Dict, List, Optional, Sequence, Union
+from urllib.parse import urlparse
+
+from camoufox import Camoufox
+from camoufox.server import launch_server
+
+LOGGER = logging.getLogger("camoufox-launcher")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+
+
+def _env_bool(name: str) -> Optional[bool]:
+    value = os.environ.get(name)
+    if value is None or value == "":
+        return None
+    value_lower = value.strip().lower()
+    if value_lower in {"1", "true", "yes", "on"}:
+        return True
+    if value_lower in {"0", "false", "no", "off"}:
+        return False
+    LOGGER.warning("Environment variable %s has invalid boolean value %s", name, value)
+    return None
+
+
+def _env_float(name: str) -> Optional[float]:
+    value = os.environ.get(name)
+    if value is None or value == "":
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        LOGGER.warning("Environment variable %s has invalid numeric value %s", name, value)
+        return None
+
+
+def _env_list(name: str, separator: str = ",") -> Optional[List[str]]:
+    value = os.environ.get(name)
+    if value is None or value.strip() == "":
+        return None
+    items = [item.strip() for item in value.split(separator)]
+    result = [item for item in items if item]
+    return result or None
+
+
+def _env_locale(name: str) -> Optional[Union[str, List[str]]]:
+    locales = _env_list(name)
+    if locales is None:
+        return None
+    if len(locales) == 1:
+        return locales[0]
+    return locales
+
+
+def _env_headless() -> Optional[Union[bool, str]]:
+    value = os.environ.get("CAMOUFOX_HEADLESS")
+    if value is None or value == "":
+        return None
+    value_lower = value.strip().lower()
+    if value_lower == "virtual":
+        return "virtual"
+    bool_value = _env_bool("CAMOUFOX_HEADLESS")
+    if bool_value is None:
+        LOGGER.warning("CAMOUFOX_HEADLESS must be true, false, 1, 0, or virtual. Got %s", value)
+    return bool_value
+
+
+def _env_humanize() -> Optional[Union[bool, float]]:
+    value = os.environ.get("CAMOUFOX_HUMANIZE")
+    if value is None or value == "":
+        return None
+    value_lower = value.strip().lower()
+    if value_lower in {"true", "false", "1", "0", "yes", "no", "on", "off"}:
+        bool_value = _env_bool("CAMOUFOX_HUMANIZE")
+        if bool_value is not None:
+            return bool_value
+    return _env_float("CAMOUFOX_HUMANIZE")
+
+
+def _env_window() -> Optional[tuple[int, int]]:
+    value = os.environ.get("CAMOUFOX_WINDOW")
+    if value is None or value.strip() == "":
+        return None
+    cleaned = value.lower().replace("x", " ").replace(",", " ")
+    parts = [p for p in cleaned.split() if p]
+    if len(parts) != 2:
+        LOGGER.warning("CAMOUFOX_WINDOW must contain width and height. Got %s", value)
+        return None
+    try:
+        width, height = (int(parts[0]), int(parts[1]))
+        return width, height
+    except ValueError:
+        LOGGER.warning("CAMOUFOX_WINDOW must contain numeric width and height. Got %s", value)
+        return None
+
+
+def _env_proxy() -> Optional[Dict[str, str]]:
+    raw = os.environ.get("CAMOUFOX_PROXY")
+    if raw is None or raw.strip() == "":
+        return None
+    parsed = urlparse(raw)
+    if not parsed.scheme or not parsed.hostname:
+        LOGGER.warning("CAMOUFOX_PROXY has invalid value %s", raw)
+        return None
+    proxy: Dict[str, str] = {"server": raw}
+    if parsed.username:
+        proxy["username"] = parsed.username
+    if parsed.password:
+        proxy["password"] = parsed.password
+    return proxy
+
+
+def _load_config() -> Optional[Dict[str, Any]]:
+    config_json = os.environ.get("CAMOUFOX_CONFIG_JSON")
+    config_path = os.environ.get("CAMOUFOX_CONFIG_FILE")
+    if config_json:
+        try:
+            return json.loads(config_json)
+        except json.JSONDecodeError as exc:
+            LOGGER.error("Unable to parse CAMOUFOX_CONFIG_JSON: %s", exc)
+    if config_path:
+        try:
+            with open(config_path, "r", encoding="utf-8") as fh:
+                return json.load(fh)
+        except (OSError, json.JSONDecodeError) as exc:
+            LOGGER.error("Unable to load CAMOUFOX_CONFIG_FILE %s: %s", config_path, exc)
+    return None
+
+
+def _collect_launch_options(cli_args: Sequence[str]) -> Dict[str, Any]:
+    options: Dict[str, Any] = {}
+
+    config = _load_config()
+    if config:
+        options["config"] = config
+
+    for env_name, option_name in [
+        ("CAMOUFOX_BLOCK_IMAGES", "block_images"),
+        ("CAMOUFOX_BLOCK_WEBRTC", "block_webrtc"),
+        ("CAMOUFOX_BLOCK_WEBGL", "block_webgl"),
+        ("CAMOUFOX_DISABLE_COOP", "disable_coop"),
+        ("CAMOUFOX_ENABLE_CACHE", "enable_cache"),
+    ]:
+        value = _env_bool(env_name)
+        if value is not None:
+            options[option_name] = value
+
+    humanize = _env_humanize()
+    if humanize is not None:
+        options["humanize"] = humanize
+
+    locale = _env_locale("CAMOUFOX_LOCALE")
+    if locale is not None:
+        options["locale"] = locale
+
+    os_targets = _env_list("CAMOUFOX_OS")
+    if os_targets is not None:
+        options["os"] = os_targets
+
+    window = _env_window()
+    if window is not None:
+        options["window"] = window
+
+    proxy = _env_proxy()
+    if proxy is not None:
+        options["proxy"] = proxy
+
+    headless = _env_headless()
+    if headless is not None:
+        options["headless"] = headless
+
+    debug_flag = _env_bool("CAMOUFOX_DEBUG")
+    if debug_flag is not None:
+        options["debug"] = debug_flag
+
+    options["args"] = list(cli_args)
+    options["env"] = dict(os.environ)
+    return options
+
+
+def _wait_for_context_close(context) -> None:
+    try:
+        context.wait_for_event("close")
+    except Exception as exc:  # pragma: no cover - best effort cleanup
+        LOGGER.debug("Context wait_for_event failed: %s", exc)
+
+
+def _run_browser(options: Dict[str, Any]) -> int:
+    LOGGER.info("Starting Camoufox persistent context")
+    launch_options = dict(options)
+    launch_options.pop("args", None)  # args handled below to avoid duplication
+    args = options.get("args", [])
+    env_map = options.get("env")
+
+    camoufox = Camoufox(persistent_context=True, args=args, env=env_map, **launch_options)
+    context = None
+
+    def _close_context(signum, frame):  # type: ignore[override]
+        LOGGER.info("Received signal %s, closing Camoufox", signum)
+        try:
+            if context and not context.is_closed():
+                context.close()
+        except Exception as exc:  # pragma: no cover - best effort cleanup
+            LOGGER.debug("Error while closing context: %s", exc)
+
+    signal.signal(signal.SIGTERM, _close_context)
+    signal.signal(signal.SIGINT, _close_context)
+
+    try:
+        context = camoufox.__enter__()
+        if hasattr(context, "pages") and not context.pages:
+            context.new_page()
+        LOGGER.info("Camoufox is ready. Close the browser window or press Ctrl+C to stop.")
+        _wait_for_context_close(context)
+        LOGGER.info("Camoufox session closed.")
+        return 0
+    except KeyboardInterrupt:
+        LOGGER.info("Shutdown requested by user.")
+        return 0
+    finally:
+        try:
+            camoufox.__exit__(None, None, None)
+        except Exception as exc:  # pragma: no cover - best effort cleanup
+            LOGGER.debug("Error while shutting down Camoufox: %s", exc)
+
+
+def _run_server(options: Dict[str, Any]) -> int:
+    LOGGER.info("Starting Camoufox Playwright server")
+    try:
+        launch_server(**options)
+    except KeyboardInterrupt:
+        LOGGER.info("Server stopped by user request.")
+        return 0
+    return 0
+
+
+def main() -> int:
+    cli_args = sys.argv[1:]
+    options = _collect_launch_options(cli_args)
+    server_mode = _env_bool("CAMOUFOX_SERVER")
+    if server_mode is None:
+        server_mode = _env_bool("PLAYWRIGHT_SERVER") or False
+
+    if server_mode:
+        return _run_server(options)
+    return _run_browser(options)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

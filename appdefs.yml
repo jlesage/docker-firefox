@@ -1,7 +1,7 @@
 ---
 
 #
-# Definitions for Firefox docker container.
+# Definitions for the Camoufox + Playwright docker container.
 #
 # This file is used as data source to generate README.md and unRAID template files
 # from Jinja2 templates.
@@ -9,17 +9,18 @@
 
 app:
   id: 14
-  name: firefox
-  friendly_name: Firefox
+  name: camoufox
+  friendly_name: Camoufox
   gui_type: x11
   base_os: alpine
   project:
     description: |-
-      Mozilla Firefox is a free and open-source web browser developed by Mozilla
-      Foundation and its subsidiary, Mozilla Corporation.
-    url: https://www.mozilla.org/firefox/
+      Camoufox is a fingerprint-resistant build of Firefox designed for
+      automation and scraping workloads. It integrates tightly with
+      Playwright to provide stealth browser automation out of the box.
+    url: https://camoufox.com
   unraid:
-    support_url: https://forums.unraid.net/topic/69440-support-firefox/
+    support_url: https://github.com/batrapvd/docker-camoufox-playwright/issues
     category: "Tools:"
   documentation:
     sections:
@@ -91,6 +92,15 @@ app:
 
           **NOTE**: This is an advanced usage and it is recommended to set preferences
           via {{ app.friendly_name }} directly.
+      - title: Playwright Server Mode
+        level: 2
+        content: |-
+          To expose Playwright's WebSocket endpoint instead of the interactive GUI,
+          set the environment variable `CAMOUFOX_SERVER=1` (or `PLAYWRIGHT_SERVER=1`).
+          The container will log the connection URL in its startup output. Use
+          `docker logs <container>` to retrieve the WebSocket endpoint and connect
+          from your automation scripts using `playwright.firefox.connect(ws_endpoint)`.
+          All other `CAMOUFOX_*` launch options still apply while running in this mode.
       - title: Troubleshooting
         level: 2
       - title: Crashes
@@ -102,6 +112,12 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.10.0
+      date: 2025-10-16
+      changes:
+        - 'Switched to Camoufox with integrated Playwright support.'
+        - 'Pre-installed the Python Playwright runtime and added a launcher that keeps persistent contexts alive.'
+        - 'Added optional Playwright server mode controlled via `CAMOUFOX_SERVER`.'
     - version: 25.09.1
       date: 2025-09-07
       changes:
@@ -491,7 +507,7 @@ container:
         mask: false
     - name: FF_KIOSK
       description: >-
-        Set to `1` to enable kiosk mode.  This mode launches Firefox in a very
+        Set to `1` to enable kiosk mode.  This mode launches {{ app.friendly_name }} in a very
         restricted and limited mode best suitable for public areas or
         customer-facing displays.
       type: public
@@ -499,7 +515,7 @@ container:
       unraid_template:
         title: "Kiosk Mode"
         description: >-
-          Set to 1 to enable kiosk mode.  This mode launches Firefox in a very
+          Set to 1 to enable kiosk mode.  This mode launches {{ app.friendly_name }} in a very
           restricted and limited mode best suitable for public areas or
           customer-facing displays.
         display: advanced
@@ -512,6 +528,51 @@ container:
       default: 0
       unraid_template:
         title: "Custom Arguments"
+        display: advanced
+        required: false
+        mask: false
+    - name: CAMOUFOX_SERVER
+      description: >-
+        When set to `1`, start the Playwright server instead of the interactive
+        browser. The WebSocket endpoint is printed to the container logs.
+      type: public
+      default: 0
+      unraid_template:
+        title: "Playwright Server"
+        description: >-
+          Set to 1 to expose Camoufox through Playwright's WebSocket server.
+          The endpoint is available via `docker logs`.
+        display: advanced
+        required: false
+        mask: false
+    - name: CAMOUFOX_HEADLESS
+      description: >-
+        Controls headless mode. Accepts `true`, `false`, or `virtual` to use a
+        virtual X display while keeping rendering off-screen.
+      type: public
+      default: "false"
+      unraid_template:
+        title: "Headless Mode"
+        display: advanced
+        required: false
+        mask: false
+    - name: CAMOUFOX_CONFIG_JSON
+      description: >-
+        Inline JSON object that overrides Camoufox fingerprint properties.
+        Use this to pin specific navigator, locale, screen or WebGL values.
+      type: public
+      unraid_template:
+        title: "Camoufox Config (JSON)"
+        display: advanced
+        required: false
+        mask: false
+    - name: CAMOUFOX_PROXY
+      description: >-
+        Proxy URL passed to Playwright, e.g. `scheme://user:pass@host:port`.
+        Credentials are optional.
+      type: public
+      unraid_template:
+        title: "Proxy URL"
         display: advanced
         required: false
         mask: false
