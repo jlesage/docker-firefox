@@ -3,11 +3,11 @@
 set -e # Exit immediately if a command exits with a non-zero status.
 set -u # Treat unset variables as an error.
 
-# Set location of profile.
+# Set location of profile used by Camoufox.
 echo "--profile"
 echo "/config/profile"
 
-# Make sure we don't get ask to be the default browser.
+# Make sure we don't get asked to be the default browser.
 echo "--setDefaultBrowser"
 
 # Check if kiosk mode is enabled.
