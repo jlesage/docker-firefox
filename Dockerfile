@@ -44,8 +44,8 @@ ENV \
 
 RUN \
     mkdir -p "$PLAYWRIGHT_BROWSERS_PATH" && \
-    python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir camoufox==${CAMOUFOX_PYPI_VERSION} && \
+    python3 -m pip install --no-cache-dir --break-system-packages --upgrade pip && \
+    python3 -m pip install --no-cache-dir --break-system-packages camoufox==${CAMOUFOX_PYPI_VERSION} && \
     python3 -m playwright install && \
     rm -rf /root/.cache/pip
 
