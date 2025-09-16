@@ -1,7 +1,7 @@
 #
-# firefox Dockerfile
+# Camoufox + Playwright Dockerfile
 #
-# https://github.com/jlesage/docker-firefox
+# https://github.com/batrapvd/docker-camoufox-playwright
 #
 
 # Build the membarrier check tool.
@@ -19,7 +19,7 @@ FROM jlesage/baseimage-gui:alpine-3.22-v4.9.0
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG FIREFOX_VERSION=142.0-r0
+ARG CAMOUFOX_PYPI_VERSION=0.4.11
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
@@ -28,12 +28,25 @@ ARG FIREFOX_VERSION=142.0-r0
 # Define working directory.
 WORKDIR /tmp
 
-# Install Firefox.
+# Install system dependencies.
 RUN \
-#    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-#            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-#            --upgrade firefox=${FIREFOX_VERSION}
-     add-pkg firefox=${FIREFOX_VERSION}
+    add-pkg \
+        python3 \
+        py3-pip
+
+# Install Camoufox and Playwright runtime.
+ENV \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PLAYWRIGHT_BROWSERS_PATH=/usr/lib/playwright \
+    PIP_ROOT_USER_ACTION=ignore
+
+RUN \
+    mkdir -p "$PLAYWRIGHT_BROWSERS_PATH" && \
+    python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir camoufox==${CAMOUFOX_PYPI_VERSION} && \
+    python3 -m playwright install && \
+    rm -rf /root/.cache/pip
 
 # Install extra packages.
 RUN \
@@ -82,8 +95,8 @@ COPY --from=membarrier /tmp/membarrier_check /usr/bin/
 
 # Set internal environment variables.
 RUN \
-    set-cont-env APP_NAME "Firefox" && \
-    set-cont-env APP_VERSION "$FIREFOX_VERSION" && \
+    set-cont-env APP_NAME "Camoufox" && \
+    set-cont-env APP_VERSION "$CAMOUFOX_PYPI_VERSION" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     true
 
@@ -95,8 +108,8 @@ ENV \
 
 # Metadata.
 LABEL \
-      org.label-schema.name="firefox" \
-      org.label-schema.description="Docker container for Firefox" \
+      org.label-schema.name="camoufox" \
+      org.label-schema.description="Docker container for Camoufox" \
       org.label-schema.version="${DOCKER_IMAGE_VERSION:-unknown}" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-firefox" \
+      org.label-schema.vcs-url="https://github.com/batrapvd/docker-camoufox-playwright" \
       org.label-schema.schema-version="1.0"
