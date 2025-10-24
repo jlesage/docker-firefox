@@ -509,7 +509,6 @@ container:
       description: >-
         Custom argument(s) to pass when launching {{ app.friendly_name }}.
       type: public
-      default: 0
       unraid_template:
         title: "Custom Arguments"
         display: advanced
