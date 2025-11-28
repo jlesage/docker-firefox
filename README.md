@@ -44,12 +44,12 @@ Foundation and its subsidiary, Mozilla Corporation.
       * [SSVNC](#ssvnc)
       * [Certificates](#certificates)
       * [VNC Password](#vnc-password)
-      * [Web Control Panel](#web-control-panel)
       * [Web Authentication](#web-authentication)
          * [Configuring Users Credentials](#configuring-users-credentials)
    * [Reverse Proxy](#reverse-proxy)
       * [Routing Based on Hostname](#routing-based-on-hostname)
       * [Routing Based on URL Path](#routing-based-on-url-path)
+   * [Web Control Panel](#web-control-panel)
    * [Automatic Clipboard Sync](#automatic-clipboard-sync)
    * [Web Audio](#web-audio)
    * [Web File Manager](#web-file-manager)
@@ -470,34 +470,6 @@ Unauthorized users with sufficient host privileges can retrieve the password by:
 > Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143) (see section
 > [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)).
 
-### Web Control Panel
-
-The control panel is available whenever the application GUI is accessed through
-a web browser. Click the small three-dots tab on the left edge of the browser
-window to open it.
-
-![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/control-panel.png&w=500)
-
-| Control | Action / Purpose |
-|---------|------------------|
-| **X** icon | Closes the control panel. |
-| **Logout** icon | Logs out from the web interface. Visible only when [web authentication](#web-authentication) is enabled. |
-| **Keyboard** icon | Toggle the on-screen keyboard. Visible only on touch devices. |
-| **Fullscreen** icon | Toggle fullscreen mode for the browser window. |
-| **Hand** icon| Allows dragging/moving the application window. Visible only when **Scaling Mode** is *None* and **Clip to Window** is enabled.
-| **Folder** icon | Opens the intgegrated file browser. Visible only when the [file manager](#web-file-manager) is enabled. |
-| **Clipboard** text box| Mirrors the application’s clipboard. Any text typed or pasted here is sent to the application, and text copied inside the application automatically appears here. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
-| **Clear** button | Clears the clipboard. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
-| **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
-| **Volume** slider| Controls the playback volume of the audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
-| **Clip to Window** toggle | Only applies when **Scaling Mode** is *None*. When disabled, scrollbars appear if the application window is larger than the browser window. When enabled, no scrollbars are shown and the hand icon is used to pan. |
-| **Scaling Mode** dropdown | Controls how the application window is scaled to fit the browser. **None** – no scaling, the application window keeps its original size. **Local Scaling** – the image is scaled in the browser (application window size unchanged). **Remote Scaling** – the application window inside the container is automatically resized to match the browser window size. |
-| **Quality** slider | Adjusts image quality. Moving the slider left reduces bandwidth at the cost of visual quality. |
-| **Compression** slider | Adjusts compression level applied to screen updates. Moving the slider right increases compression, which lowers bandwidth but raises CPU usage. |
-| **Logging** dropdown | Sets the verbosity level of the web interface logs shown in the browser console. |
-| **Application version** label | Displays the version of the application running inside the container. |
-| **Docker image** version label | Displays the version of the Docker image currently running. |
-
 ### Web Authentication
 
 Access to the application's GUI via a web browser can be protected with a login
@@ -650,6 +622,34 @@ server {
 
 ```
 
+## Web Control Panel
+
+The control panel is available whenever the application GUI is accessed through
+a web browser. Click the small three-dots tab on the left edge of the browser
+window to open it.
+
+![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/control-panel.png&w=500)
+
+| Control | Action / Purpose |
+|---------|------------------|
+| **X** icon | Closes the control panel. |
+| **Logout** icon | Logs out from the web interface. Visible only when [web authentication](#web-authentication) is enabled. |
+| **Keyboard** icon | Toggle the on-screen keyboard. Visible only on touch devices. |
+| **Fullscreen** icon | Toggle fullscreen mode for the browser window. |
+| **Hand** icon| Allows dragging/moving the application window. Visible only when **Scaling Mode** is *None* and **Clip to Window** is enabled.
+| **Folder** icon | Opens the intgegrated file browser. Visible only when the [file manager](#web-file-manager) is enabled. |
+| **Clipboard** text box| Mirrors the application’s clipboard. Any text typed or pasted here is sent to the application, and text copied inside the application automatically appears here. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
+| **Clear** button | Clears the clipboard. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
+| **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
+| **Volume** slider| Controls the playback volume of the audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
+| **Clip to Window** toggle | Only applies when **Scaling Mode** is *None*. When disabled, scrollbars appear if the application window is larger than the browser window. When enabled, no scrollbars are shown and the hand icon is used to pan. |
+| **Scaling Mode** dropdown | Controls how the application window is scaled to fit the browser. **None** – no scaling, the application window keeps its original size. **Local Scaling** – the image is scaled in the browser (application window size unchanged). **Remote Scaling** – the application window inside the container is automatically resized to match the browser window size. |
+| **Quality** slider | Adjusts image quality. Moving the slider left reduces bandwidth at the cost of visual quality. |
+| **Compression** slider | Adjusts compression level applied to screen updates. Moving the slider right increases compression, which lowers bandwidth but raises CPU usage. |
+| **Logging** dropdown | Sets the verbosity level of the web interface logs shown in the browser console. |
+| **Application version** label | Displays the version of Firefox integrated into Docker image. |
+| **Docker image** version label | Displays the version of the Docker image currently running. |
+
 ## Automatic Clipboard Sync
 
 When the container is accessed through a web browser, automatic clipboard
@@ -693,7 +693,7 @@ Enable web audio by setting `WEB_AUDIO` to `1`. See the
 [Environment Variables](#environment-variables) section for details on
 configuring environment variables.
 
-Control of the audio (mute, unmute and volume) is done via the
+Control of the audio stream (mute, unmute and volume) is done via the
 [control panel](#web-control-panel).
 
 ## Web File Manager
