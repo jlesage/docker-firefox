@@ -12,6 +12,9 @@ The graphical user interface (GUI) of the application can be accessed through a
 modern web browser, requiring no installation or configuration on the client
 side, or via any VNC client.
 
+> [!NOTE]
+> This Docker container is entirely unofficial and not made by the creators of Firefox.
+
 ---
 
 [![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/firefox-icon.png&w=110)](https://www.mozilla.org/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/firefox/)
@@ -41,13 +44,17 @@ Foundation and its subsidiary, Mozilla Corporation.
       * [SSVNC](#ssvnc)
       * [Certificates](#certificates)
       * [VNC Password](#vnc-password)
+      * [Web Control Panel](#web-control-panel)
       * [Web Authentication](#web-authentication)
          * [Configuring Users Credentials](#configuring-users-credentials)
    * [Reverse Proxy](#reverse-proxy)
       * [Routing Based on Hostname](#routing-based-on-hostname)
       * [Routing Based on URL Path](#routing-based-on-url-path)
-      * [Web Audio](#web-audio)
-      * [Web File Manager](#web-file-manager)
+   * [Automatic Clipboard Sync](#automatic-clipboard-sync)
+   * [Web Audio](#web-audio)
+   * [Web File Manager](#web-file-manager)
+   * [Web Notifications](#web-notifications)
+   * [GPU Acceleration Support](#gpu-acceleration-support)
    * [Shell Access](#shell-access)
    * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
    * [Sound Support](#sound-support)
@@ -121,20 +128,23 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`WEB_FILE_MANAGER`| When set to `1`, enables the web file manager, allowing interaction with files inside the container through the web browser, supporting operations like renaming, deleting, uploading, and downloading. See [Web File Manager](#web-file-manager) for details. | `0` |
 |`WEB_FILE_MANAGER_ALLOWED_PATHS`| Comma-separated list of paths within the container that the file manager can access. By default, the container's entire filesystem is not accessible, and this variable specifies allowed paths. If set to `AUTO`, commonly used folders and those mapped to the container are automatically allowed. The value `ALL` allows access to all paths (no restrictions). See [Web File Manager](#web-file-manager) for details. | `AUTO` |
 |`WEB_FILE_MANAGER_DENIED_PATHS`| Comma-separated list of paths within the container that the file manager cannot access. A denied path takes precedence over an allowed path. See [Web File Manager](#web-file-manager) for details. | (no value) |
-|`WEB_AUTHENTICATION`| When set to `1`, protects the application's GUI with a login page when accessed via a web browser. Access is granted only with valid credentials. This feature requires the secure connection to be enabled. See [Web Authentication](#web-authentication) for details. | `0` |
+|`WEB_NOTIFICATION`| When set to `1`, enables the web notification service, allowing the browser to display desktop notifications from the application. Requires the container to be configured with secure web access (HTTPS). See [Web Notifications](#web-notifications) for details. | `0` |
+|`WEB_AUTHENTICATION`| When set to `1`, protects the application's GUI with a login page when accessed via a web browser. Access is granted only with valid credentials. Requires the container to be configured with secure web access (HTTPS). See [Web Authentication](#web-authentication) for details. | `0` |
 |`WEB_AUTHENTICATION_TOKEN_VALIDITY_TIME`| Lifetime of a token, in hours. A token is assigned to the user after successful login. As long as the token is valid, the user can access the application's GUI without logging in again. Once the token expires, the login page is displayed again. | `24` |
 |`WEB_AUTHENTICATION_USERNAME`| Optional username for web authentication. Provides a quick and easy way to configure credentials for a single user. For more secure configuration or multiple users, see the [Web Authentication](#web-authentication) section. | (no value) |
 |`WEB_AUTHENTICATION_PASSWORD`| Optional password for web authentication. Provides a quick and easy way to configure credentials for a single user. For more secure configuration or multiple users, see the [Web Authentication](#web-authentication) section. | (no value) |
 |`SECURE_CONNECTION`| When set to `1`, uses an encrypted connection to access the application's GUI (via web browser or VNC client). See [Security](#security) for details. | `0` |
 |`SECURE_CONNECTION_VNC_METHOD`| Method used for encrypted VNC connections. Possible values are `SSL` or `TLS`. See [Security](#security) for details. | `SSL` |
 |`SECURE_CONNECTION_CERTS_CHECK_INTERVAL`| Interval, in seconds, at which the system checks if web or VNC certificates have changed. When a change is detected, affected services are automatically restarted. A value of `0` disables the check. | `60` |
+|`WEB_LOCALHOST_ONLY`| When set to `1`, allows web connections only from localhost (127.0.0.1 and ::1). | `0` |
+|`VNC_LOCALHOST_ONLY`| When set to `1`, allows VNC connections only from localhost (127.0.0.1 and ::1). | `0` |
 |`WEB_LISTENING_PORT`| Port used by the web server to serve the application's GUI. This port is internal to the container and typically does not need to be changed. By default, a container uses the default bridge network, requiring each internal port to be mapped to an external port (using the `-p` or `--publish` argument). If another network type is used, changing this port may prevent conflicts with other services/containers. **NOTE**: A value of `-1` disables HTTP/HTTPS access to the application's GUI. | `5800` |
 |`VNC_LISTENING_PORT`| Port used by the VNC server to serve the application's GUI. This port is internal to the container and typically does not need to be changed. By default, a container uses the default bridge network, requiring each internal port to be mapped to an external port (using the `-p` or `--publish` argument). If another network type is used, changing this port may prevent conflicts with other services/containers. **NOTE**: A value of `-1` disables VNC access to the application's GUI. | `5900` |
 |`VNC_PASSWORD`| Password required to connect to the application's GUI. See the [VNC Password](#vnc-password) section for details. | (no value) |
 |`ENABLE_CJK_FONT`| When set to `1`, installs the open-source font `WenQuanYi Zen Hei`, supporting a wide range of Chinese/Japanese/Korean characters. | `0` |
 |`FF_OPEN_URL`| The URL to open when Firefox starts. Multiple URLs can be opened by separating them with the pipe character (`|`). | (no value) |
 |`FF_KIOSK`| Set to `1` to enable kiosk mode.  This mode launches Firefox in a very restricted and limited mode best suitable for public areas or customer-facing displays. | `0` |
-|`FF_CUSTOM_ARGS`| Custom argument(s) to pass when launching Firefox. | `0` |
+|`FF_CUSTOM_ARGS`| Custom argument(s) to pass when launching Firefox. | (no value) |
 
 #### Deployment Considerations
 
@@ -443,8 +453,9 @@ The security of the VNC password depends on:
   - The communication channel (encrypted or unencrypted).
   - The security of host access.
 
-When using a VNC password, enable a secure connection to prevent sending the
-password in clear text over an unencrypted channel.
+When using a VNC password, configure the container with secure web access
+(HTTPS) to prevent sending the password in clear text over an unencrypted
+channel.
 
 Unauthorized users with sufficient host privileges can retrieve the password by:
 
@@ -459,6 +470,34 @@ Unauthorized users with sufficient host privileges can retrieve the password by:
 > Framebuffer Protocol [RFC](https://tools.ietf.org/html/rfc6143) (see section
 > [7.2.2](https://tools.ietf.org/html/rfc6143#section-7.2.2)).
 
+### Web Control Panel
+
+The control panel is available whenever the application GUI is accessed through
+a web browser. Click the small three-dots tab on the left edge of the browser
+window to open it.
+
+![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/control-panel.png&w=500)
+
+| Control | Action / Purpose |
+|---------|------------------|
+| **X** icon | Closes the control panel. |
+| **Logout** icon | Logs out from the web interface. Visible only when [web authentication](#web-authentication) is enabled. |
+| **Keyboard** icon | Toggle the on-screen keyboard. Visible only on touch devices. |
+| **Fullscreen** icon | Toggle fullscreen mode for the browser window. |
+| **Hand** icon| Allows dragging/moving the application window. Visible only when **Scaling Mode** is *None* and **Clip to Window** is enabled.
+| **Folder** icon | Opens the intgegrated file browser. Visible only when the [file manager](#web-file-manager) is enabled. |
+| **Clipboard** text box| Mirrors the application’s clipboard. Any text typed or pasted here is sent to the application, and text copied inside the application automatically appears here. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
+| **Clear** button | Clears the clipboard. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
+| **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
+| **Volume** slider| Controls the playback volume of the audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
+| **Clip to Window** toggle | Only applies when **Scaling Mode** is *None*. When disabled, scrollbars appear if the application window is larger than the browser window. When enabled, no scrollbars are shown and the hand icon is used to pan. |
+| **Scaling Mode** dropdown | Controls how the application window is scaled to fit the browser. **None** – no scaling, the application window keeps its original size. **Local Scaling** – the image is scaled in the browser (application window size unchanged). **Remote Scaling** – the application window inside the container is automatically resized to match the browser window size. |
+| **Quality** slider | Adjusts image quality. Moving the slider left reduces bandwidth at the cost of visual quality. |
+| **Compression** slider | Adjusts compression level applied to screen updates. Moving the slider right increases compression, which lowers bandwidth but raises CPU usage. |
+| **Logging** dropdown | Sets the verbosity level of the web interface logs shown in the browser console. |
+| **Application version** label | Displays the version of the application running inside the container. |
+| **Docker image** version label | Displays the version of the Docker image currently running. |
+
 ### Web Authentication
 
 Access to the application's GUI via a web browser can be protected with a login
@@ -469,8 +508,8 @@ variable to `1`. See the [Environment Variables](#environment-variables) section
 for details on configuring environment variables.
 
 > [!IMPORTANT]
-> Web authentication requires a secure connection to be enabled. See
-> [Security](#security) for details.
+> Web authentication requires the container to be configured with secure web
+> access (HTTPS). See [Security](#security) for details.
 
 #### Configuring Users Credentials
 
@@ -611,7 +650,34 @@ server {
 
 ```
 
-### Web Audio
+## Automatic Clipboard Sync
+
+When the container is accessed through a web browser, automatic clipboard
+synchronization enables seamless sharing of clipboard contents between the host
+system and the application running inside the container. This makes it possible
+to copy and paste text or data directly between the two environments without
+manual transfer steps.
+
+This functionality is not available when using VNC clients and is supported only
+in browsers based on the Chromium engine, such as Google Chrome and Microsoft
+Edge.
+
+Clipboard synchronization operates transparently once permission has been
+granted by the browser. Depending on browser implementation, a prompt may appear
+the first time clipboard access is requested.
+
+> [!IMPORTANT]
+> Web browsers only allow access to the clipboard in secure contexts (HTTPS).
+> This means the container must be configured with secure web access. See
+> [Security](#security) for details.
+
+> [!TIP]
+> If automatic clipboard synchronization is not available, text can still be
+> copied and pasted using the clipboard of the
+> [control panel](#web-control-panel), which provides manual clipboard access
+> between the host and the container.
+
+## Web Audio
 
 The container supports streaming audio from the application, played through the
 user's web browser. Audio is not supported for VNC clients.
@@ -627,7 +693,10 @@ Enable web audio by setting `WEB_AUDIO` to `1`. See the
 [Environment Variables](#environment-variables) section for details on
 configuring environment variables.
 
-### Web File Manager
+Control of the audio (mute, unmute and volume) is done via the
+[control panel](#web-control-panel).
+
+## Web File Manager
 
 The container includes a simple file manager for interacting with container
 files through a web browser, supporting operations like renaming, deleting,
@@ -636,6 +705,9 @@ uploading, and downloading.
 Enable the file manager by setting `WEB_FILE_MANAGER` to `1`. See the
 [Environment Variables](#environment-variables) section for details on
 configuring environment variables.
+
+Open the file manager by clicking the folder icon of the
+[control panel](#web-control-panel)
 
 By default, the container's entire filesystem is not accessible. The
 `WEB_FILE_MANAGER_ALLOWED_PATHS` environment variable is a comma-separated list
@@ -647,6 +719,37 @@ The `WEB_FILE_MANAGER_DENIED_PATHS` environment variable defines which paths are
 explicitly denied access by the file manager. A denied path takes precedence
 over an allowed one.
 
+## Web Notifications
+
+The container includes support for notifications sent through the web browser.
+Any desktop notification generated by Firefox is forwarded to the
+browser, which then displays it as a native notification on the user's system.
+
+Enable the web notification service by setting `WEB_NOTIFICATION` to `1`. See
+the [Environment Variables](#environment-variables) section for details on
+configuring environment variables.
+
+> [!IMPORTANT]
+> Web browsers only allow notifications in secure contexts (HTTPS). This means
+> the container must be configured with secure web access. See
+> [Security](#security) for details.
+
+## GPU Acceleration Support
+
+This container supports hardware-accelerated rendering of the application's
+graphical user interface. When enabled, the X server running inside the
+container can use the host GPU, providing improved rendering performance and
+full hardware acceleration for OpenGL via the GLX extension.
+
+This feature requires open-source kernel drivers on the host system, such as
+`amdgpu` for AMD GPUs, `i915` for Intel GPUs, or `nouveau` for NVIDIA GPUs, to
+support the Direct Rendering Infrastructure (DRI3) and Generic Buffer Management
+(GBM). Proprietary drivers, such as NVIDIA's, are not supported.
+
+To enable GPU acceleration, the host must have compatible open-source kernel
+drivers installed, and the GPU device `/dev/dri` must be exposed to the
+container. For example, this is done by adding the `--device /dev/dri`
+argument to the `docker run` command.
 ## Shell Access
 
 To access the shell of a running container, execute the following command:
