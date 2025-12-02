@@ -44,6 +44,8 @@ RUN \
         libva-intel-driver \
         # Audio support.
         libpulse \
+        # Desktop notification support.
+        libnotify \
         # Icons used by folder/file selection window (when saving as).
         adwaita-icon-theme \
         # A font is needed.
