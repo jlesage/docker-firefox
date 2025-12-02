@@ -37,11 +37,15 @@ RUN \
 
 # Install extra packages.
 RUN \
+    ARCH="$(apk --print-arch)" && \
+    if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x86_64" ]; then \
+        libva_intel_driver="libva-intel-driver"; \
+    fi && \
     add-pkg \
         # WebGL support.
         mesa-dri-gallium \
         mesa-va-gallium \
-        libva-intel-driver \
+        $libva_intel_driver \
         # Audio support.
         libpulse \
         # Desktop notification support.
