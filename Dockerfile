@@ -40,6 +40,8 @@ RUN \
     add-pkg \
         # WebGL support.
         mesa-dri-gallium \
+        mesa-va-gallium \
+        libva-intel-driver \
         # Audio support.
         libpulse \
         # Icons used by folder/file selection window (when saving as).
