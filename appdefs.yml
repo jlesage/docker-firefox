@@ -48,12 +48,6 @@ app:
             [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
             [latest official seccomp profile]: https://github.com/moby/moby/blob/master/vendor/github.com/moby/profiles/seccomp/default.json
             [seccomp profile]: https://docs.docker.com/engine/security/seccomp/
-      - title: Sound Support
-        level: 2
-        content: |-
-          For {{ app.friendly_name }} to be able to use the audio device available on
-          the host, `/dev/snd` must be exposed to the container by adding the
-          `--device /dev/snd` parameter to the `docker run` command.
       - title: Setting {{ app.friendly_name }} Preferences Via Environment Variables
         level: 2
         content: |-

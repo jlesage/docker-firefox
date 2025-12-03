@@ -57,7 +57,6 @@ Foundation and its subsidiary, Mozilla Corporation.
    * [GPU Acceleration Support](#gpu-acceleration-support)
    * [Shell Access](#shell-access)
    * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
-   * [Sound Support](#sound-support)
    * [Setting Firefox Preferences Via Environment Variables](#setting-firefox-preferences-via-environment-variables)
    * [Troubleshooting](#troubleshooting)
       * [Crashes](#crashes)
@@ -785,12 +784,6 @@ container permission to use this sytem call:
   [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
   [latest official seccomp profile]: https://github.com/moby/moby/blob/master/vendor/github.com/moby/profiles/seccomp/default.json
   [seccomp profile]: https://docs.docker.com/engine/security/seccomp/
-
-## Sound Support
-
-For Firefox to be able to use the audio device available on
-the host, `/dev/snd` must be exposed to the container by adding the
-`--device /dev/snd` parameter to the `docker run` command.
 
 ## Setting Firefox Preferences Via Environment Variables
 
