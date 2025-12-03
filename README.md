@@ -783,7 +783,7 @@ container permission to use this sytem call:
      seccomp.  Add the `--privileged` parameter when creating the container.
 
   [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
-  [latest official seccomp profile]: https://github.com/moby/moby/blob/master/profiles/seccomp/default.json
+  [latest official seccomp profile]: https://github.com/moby/moby/blob/master/vendor/github.com/moby/profiles/seccomp/default.json
   [seccomp profile]: https://docs.docker.com/engine/security/seccomp/
 
 ## Sound Support
