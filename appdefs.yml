@@ -96,6 +96,16 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.12.1
+      date: 2025-12-02
+      changes:
+        - 'Updated baseimage to version 4.10.1, which brings the following changes:'
+        - '2:Added hardware acceleration support for the X server.'
+        - '2:Added seamless clipboard synchronization for Chromium-based browsers.'
+        - '2:Added web notification service to forward desktop notifications to the browser.'
+        - '2:Added the ability to restrict web and VNC connections from localhost only.'
+        - '2:Added web server support for TLS 1.3.'
+        - '2:Removed web server support of static Diffie-Hellman parameters file (no longer needed in modern TLS configurations and ECDHE).'
     - version: 25.09.1
       date: 2025-09-07
       changes:
