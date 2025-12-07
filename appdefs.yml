@@ -96,6 +96,12 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.12.2
+      date: 2025-12-07
+      changes:
+        - 'Updated Firefox to version 145.0-r0.'
+        - 'Updated baseimage to version 4.10.3, which brings the following changes:'
+        - '2:Fixed desktop notification forwarding service issues related to clients and WebSocket management.'
     - version: 25.12.1
       date: 2025-12-02
       changes:
