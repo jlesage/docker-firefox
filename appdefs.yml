@@ -96,6 +96,10 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.12.3
+      date: 2025-12-12
+      changes:
+        - 'Use Firefox native notification backend when web notification support is disabled.'
     - version: 25.12.2
       date: 2025-12-07
       changes:
