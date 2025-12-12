@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# When web notification support is disabled, make sure to disable in Firefox the
+# use of system backend for notifications (alerts). Without this, notifications
+# won't be shown at all.
+#
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+if is-bool-val-false "${WEB_NOTIFICATION:-0}"; then
+    echo "alerts.useSystemBackend=false"
+else
+    echo "alerts.useSystemBackend=true"
+fi
+
+# vim:ft=sh:ts=4:sw=4:et:sts=4
