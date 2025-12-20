@@ -96,6 +96,13 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 25.12.4
+      date: 2025-12-20
+      changes:
+        - 'Updated baseimage to version 4.10.4, which brings the following changes:'
+        - '2:Web audio is now automatically re-enabled upon first user interaction.'
+        - '2:Improved robustness of GPU devices detection.'
+        - '2:Command key on Mac devices has been remapped to better match Linux application interactions.'
     - version: 25.12.3
       date: 2025-12-12
       changes:
