@@ -13,7 +13,7 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.23-v4.10.5
+FROM jlesage/baseimage-gui:alpine-3.23-v4.10.6
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
@@ -52,6 +52,8 @@ RUN \
         libnotify \
         # Icons used by folder/file selection window (when saving as).
         adwaita-icon-theme \
+        # The following package is used to send key presses to the X process.
+        xdotool \
         # A font is needed.
         font-dejavu \
         && \
