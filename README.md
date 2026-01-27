@@ -117,7 +117,7 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`LANG`| Sets the [locale](https://en.wikipedia.org/wiki/Locale_(computer_software)), defining the application's language, if supported. Format is `language[_territory][.codeset]`, where language is an [ISO 639 language code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), territory is an [ISO 3166 country code](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes), and codeset is a character set, like `UTF-8`. For example, Australian English using UTF-8 is `en_AU.UTF-8`. | `en_US.UTF-8` |
 |`TZ`| [TimeZone](http://en.wikipedia.org/wiki/List_of_tz_database_time_zones) used by the container. The timezone can also be set by mapping `/etc/localtime` between the host and the container. | `Etc/UTC` |
 |`KEEP_APP_RUNNING`| When set to `1`, the application is automatically restarted if it crashes or terminates. | `0` |
-|`APP_NICENESS`| Priority at which the application runs. A niceness value of -20 is the highest, 19 is the lowest and 0 the default. **NOTE**: A negative niceness (priority increase) requires additional permissions. The container must be run with the Docker option `--cap-add=SYS_NICE`. | `0` |
+|`APP_NICENESS`| Priority at which the application runs. A niceness value of `-20` is the highest, `19` is the lowest and `0` the default. **NOTE**: A negative niceness (priority increase) requires additional permissions. The container must be run with the Docker option `--cap-add=SYS_NICE`. | `0` |
 |`INSTALL_PACKAGES`| Space-separated list of packages to install during container startup. List of available packages can be found at https://pkgs.alpinelinux.org. | (no value) |
 |`PACKAGES_MIRROR`| Mirror of the repository to use when installing packages. List of mirrors is available at https://mirrors.alpinelinux.org. | (no value) |
 |`CONTAINER_DEBUG`| When set to `1`, enables debug logging. | `0` |
@@ -143,7 +143,7 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`VNC_PASSWORD`| Password required to connect to the application's GUI. See the [VNC Password](#vnc-password) section for details. | (no value) |
 |`ENABLE_CJK_FONT`| When set to `1`, installs the open-source font `WenQuanYi Zen Hei`, supporting a wide range of Chinese/Japanese/Korean characters. | `0` |
 |`FF_OPEN_URL`| The URL to open when Firefox starts. Multiple URLs can be opened by separating them with the pipe character (`|`). | (no value) |
-|`FF_KIOSK`| Set to `1` to enable kiosk mode.  This mode launches Firefox in a very restricted and limited mode best suitable for public areas or customer-facing displays. | `0` |
+|`FF_KIOSK`| Set to `1` to enable kiosk mode. This mode launches Firefox in a very restricted and limited mode best suitable for public areas or customer-facing displays. | `0` |
 |`FF_CUSTOM_ARGS`| Custom argument(s) to pass when launching Firefox. | (no value) |
 
 #### Deployment Considerations
@@ -748,23 +748,23 @@ creation.
 ## Allowing the membarrier System Call
 
 To properly work, recent versions of Firefox need the
-`membarrier` system call.  Without it, tabs would frequently crash.
+`membarrier` system call. Without it, tabs would frequently crash.
 
 Docker uses [seccomp profile] to restrict system calls available to the
-container.  Before Docker version `20.10.0`, the `membarrier` system call was
-not allowed in the default profile.  If you run a such version, you can use one
+container. Before Docker version `20.10.0`, the `membarrier` system call was
+not allowed in the default profile. If you run a such version, you can use one
 of the following solutions, from the most to the least secure, to provide the
 container permission to use this sytem call:
 
   1. Run the container with a custom seccomp profile allowing the `membarrier`
-     system call.  The [latest official seccomp profile] can be used.  Download
+     system call. The [latest official seccomp profile] can be used. Download
      the file and then add the following parameter when creating the container:
      `--security-opt seccomp=/path/to/seccomp_profile.json`.
   2. Run the container without the default seccomp profile (thus allowing all
      system calls). Use the following parameter when creating the container:
      `--security-opt seccomp=unconfined`.
-  3. Run the container in privileged mode.  This effectively disables usage of
-     seccomp.  Add the `--privileged` parameter when creating the container.
+  3. Run the container in privileged mode. This effectively disables usage of
+     seccomp. Add the `--privileged` parameter when creating the container.
 
   [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
   [latest official seccomp profile]: https://github.com/moby/moby/blob/master/vendor/github.com/moby/profiles/seccomp/default.json
@@ -773,21 +773,21 @@ container permission to use this sytem call:
 ## Setting Firefox Preferences Via Environment Variables
 
 Firefox preferences can be set via environment variables
-passed to the container.  During the startup, a script process all these
+passed to the container. During the startup, a script process all these
 variables and modify the preference file accordingly.
 
 The name of the environment variable must start with `FF_PREF_`, followed by a
-string of your choice.  For example, `FF_PREF_MY_PREF` is a valid name.
+string of your choice. For example, `FF_PREF_MY_PREF` is a valid name.
 
 The content of the variable should be in the format `NAME=VAL`, where `NAME` is
 the name of the preference (as found in the `about:config` page) and `VAL` is
-its value.  A value can be one of the following types:
+its value. A value can be one of the following types:
   - string
   - integer
   - boolean
 
 It is important to note that a value of type `string` should be surrounded by
-double quotes.  Other types don't need them.
+double quotes. Other types don't need them.
 
 For example, to set the `network.proxy.http` preference, one would pass the
 environment variable to the container by adding the following argument to the
@@ -797,7 +797,7 @@ environment variable to the container by adding the following argument to the
 -e "FF_PREF_HTTP_PROXY=network.proxy.http=\"proxy.example.com\""
 ```
 
-If a preference needs to be *removed*, its value should be set to `UNSET`.  For
+If a preference needs to be *removed*, its value should be set to `UNSET`. For
 example:
 
 ```
@@ -812,7 +812,7 @@ via Firefox directly.
 ### Crashes
 
 If Firefox is crashing frequently, make sure that:
-  - The `membarrier` system call is not blocked by Docker.  See the
+  - The `membarrier` system call is not blocked by Docker. See the
     [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
     for more details.
   - Make sure the kernel of your Linux distribution is up-to-date.

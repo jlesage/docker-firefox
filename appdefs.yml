@@ -27,23 +27,23 @@ app:
         level: 2
         content: |-
           To properly work, recent versions of {{ app.friendly_name }} need the
-          `membarrier` system call.  Without it, tabs would frequently crash.
+          `membarrier` system call. Without it, tabs would frequently crash.
 
           Docker uses [seccomp profile] to restrict system calls available to the
-          container.  Before Docker version `20.10.0`, the `membarrier` system call was
-          not allowed in the default profile.  If you run a such version, you can use one
+          container. Before Docker version `20.10.0`, the `membarrier` system call was
+          not allowed in the default profile. If you run a such version, you can use one
           of the following solutions, from the most to the least secure, to provide the
           container permission to use this sytem call:
 
             1. Run the container with a custom seccomp profile allowing the `membarrier`
-               system call.  The [latest official seccomp profile] can be used.  Download
+               system call. The [latest official seccomp profile] can be used. Download
                the file and then add the following parameter when creating the container:
                `--security-opt seccomp=/path/to/seccomp_profile.json`.
             2. Run the container without the default seccomp profile (thus allowing all
                system calls). Use the following parameter when creating the container:
                `--security-opt seccomp=unconfined`.
-            3. Run the container in privileged mode.  This effectively disables usage of
-               seccomp.  Add the `--privileged` parameter when creating the container.
+            3. Run the container in privileged mode. This effectively disables usage of
+               seccomp. Add the `--privileged` parameter when creating the container.
 
             [here]: https://bugzilla.mozilla.org/show_bug.cgi?id=1338771#c10
             [latest official seccomp profile]: https://github.com/moby/moby/blob/master/vendor/github.com/moby/profiles/seccomp/default.json
@@ -52,21 +52,21 @@ app:
         level: 2
         content: |-
           {{ app.friendly_name }} preferences can be set via environment variables
-          passed to the container.  During the startup, a script process all these
+          passed to the container. During the startup, a script process all these
           variables and modify the preference file accordingly.
 
           The name of the environment variable must start with `FF_PREF_`, followed by a
-          string of your choice.  For example, `FF_PREF_MY_PREF` is a valid name.
+          string of your choice. For example, `FF_PREF_MY_PREF` is a valid name.
 
           The content of the variable should be in the format `NAME=VAL`, where `NAME` is
           the name of the preference (as found in the `about:config` page) and `VAL` is
-          its value.  A value can be one of the following types:
+          its value. A value can be one of the following types:
             - string
             - integer
             - boolean
 
           It is important to note that a value of type `string` should be surrounded by
-          double quotes.  Other types don't need them.
+          double quotes. Other types don't need them.
 
           For example, to set the `network.proxy.http` preference, one would pass the
           environment variable to the container by adding the following argument to the
@@ -76,7 +76,7 @@ app:
           -e "FF_PREF_HTTP_PROXY=network.proxy.http=\"proxy.example.com\""
           ```
 
-          If a preference needs to be *removed*, its value should be set to `UNSET`.  For
+          If a preference needs to be *removed*, its value should be set to `UNSET`. For
           example:
 
           ```
@@ -91,7 +91,7 @@ app:
         level: 3
         content: |-
           If {{ app.friendly_name }} is crashing frequently, make sure that:
-            - The `membarrier` system call is not blocked by Docker.  See the
+            - The `membarrier` system call is not blocked by Docker. See the
               [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
@@ -327,7 +327,7 @@ app:
     - version: 22.12.2
       date: 2022-12-11
       changes:
-        - 'Implemented workaround for issue seen with Synology devices where container would not start after an image update.  The problem is caused by Synology explicitly setting all environment variables and keeping values from the old version.'
+        - 'Implemented workaround for issue seen with Synology devices where container would not start after an image update. The problem is caused by Synology explicitly setting all environment variables and keeping values from the old version.'
     - version: 22.12.1
       date: 2022-12-09
       changes:
@@ -514,25 +514,18 @@ container:
       type: public
       unraid_template:
         title: "Open URL"
-        description: >-
-          The URL to open when {{ app.friendly_name }} starts. Multiple URLs can
-          be opened by separating them with the pipe character ('|').
         display: advanced
         required: false
         mask: false
     - name: FF_KIOSK
       description: >-
-        Set to `1` to enable kiosk mode.  This mode launches Firefox in a very
+        Set to `1` to enable kiosk mode. This mode launches Firefox in a very
         restricted and limited mode best suitable for public areas or
         customer-facing displays.
       type: public
       default: 0
       unraid_template:
         title: "Kiosk Mode"
-        description: >-
-          Set to 1 to enable kiosk mode.  This mode launches Firefox in a very
-          restricted and limited mode best suitable for public areas or
-          customer-facing displays.
         display: advanced
         required: false
         mask: false
