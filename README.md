@@ -55,6 +55,7 @@ Foundation and its subsidiary, Mozilla Corporation.
    * [Web Audio](#web-audio)
    * [Web File Manager](#web-file-manager)
    * [Web Notifications](#web-notifications)
+      * [Web Terminal](#web-terminal)
    * [GPU Acceleration Support](#gpu-acceleration-support)
    * [Shell Access](#shell-access)
    * [Allowing the membarrier System Call](#allowing-the-membarrier-system-call)
@@ -129,6 +130,7 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`WEB_FILE_MANAGER_ALLOWED_PATHS`| Comma-separated list of paths within the container that the file manager can access. By default, the container's entire filesystem is not accessible, and this variable specifies allowed paths. If set to `AUTO`, commonly used folders and those mapped to the container are automatically allowed. The value `ALL` allows access to all paths (no restrictions). See [Web File Manager](#web-file-manager) for details. | `AUTO` |
 |`WEB_FILE_MANAGER_DENIED_PATHS`| Comma-separated list of paths within the container that the file manager cannot access. A denied path takes precedence over an allowed path. See [Web File Manager](#web-file-manager) for details. | (no value) |
 |`WEB_NOTIFICATION`| When set to `1`, enables the web notification service, allowing the browser to display desktop notifications from the application. Requires the container to be configured with secure web access (HTTPS). See [Web Notifications](#web-notifications) for details. | `0` |
+|`WEB_TERMINAL`| When set to `1`, enables access to a terminal from the web interface. It is strongly recommended to configure the container with secure web access (HTTPS). See [Web Terminal](#web-terminal) for details. | `0` |
 |`WEB_AUTHENTICATION`| When set to `1`, protects the application's GUI with a login page when accessed via a web browser. Access is granted only with valid credentials. Requires the container to be configured with secure web access (HTTPS). See [Web Authentication](#web-authentication) for details. | `0` |
 |`WEB_AUTHENTICATION_TOKEN_VALIDITY_TIME`| Lifetime of a token, in hours. A token is assigned to the user after successful login. As long as the token is valid, the user can access the application's GUI without logging in again. Once the token expires, the login page is displayed again. | `24` |
 |`WEB_AUTHENTICATION_USERNAME`| Optional username for web authentication. Provides a quick and easy way to configure credentials for a single user. For more secure configuration or multiple users, see the [Web Authentication](#web-authentication) section. | (no value) |
@@ -483,6 +485,9 @@ for details on configuring environment variables.
 > Web authentication requires the container to be configured with secure web
 > access (HTTPS). See [Security](#security) for details.
 
+> [!NOTE]
+> This feature is not available to VNC clients.
+
 #### Configuring Users Credentials
 
 User credentials can be configured in two ways:
@@ -548,17 +553,14 @@ server {
 
 	location / {
 		proxy_pass http://docker-firefox;
-	}
-
-	location /websockify {
-		proxy_pass http://docker-firefox;
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection $connection_upgrade;
-		proxy_read_timeout 86400;
+		proxy_buffering off;
+		proxy_read_timeout 86400s;
+		proxy_send_timeout 86400s;
 	}
 }
-
 ```
 
 ### Routing Based on URL Path
@@ -590,19 +592,17 @@ server {
 	location = /firefox {return 301 $scheme://$http_host/firefox/;}
 	location /firefox/ {
 		proxy_pass http://docker-firefox/;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection $connection_upgrade;
+		proxy_buffering off;
+		proxy_read_timeout 86400s;
+		proxy_send_timeout 86400s;
 		# Uncomment the following line if your Nginx server runs on a port that
 		# differs from the one seen by external clients.
 		#port_in_redirect off;
-		location ~ ^/firefox/(websockify(-.*)?) {
-                        proxy_pass http://docker-firefox/$1;
-			proxy_http_version 1.1;
-			proxy_set_header Upgrade $http_upgrade;
-			proxy_set_header Connection $connection_upgrade;
-			proxy_read_timeout 86400;
-		}
 	}
 }
-
 ```
 
 ## Web Control Panel
@@ -621,6 +621,7 @@ window to open it.
 | **Fullscreen** icon | Toggle fullscreen mode for the browser window. |
 | **Hand** icon| Allows dragging/moving the application window. Visible only when **Scaling Mode** is *None* and **Clip to Window** is enabled.
 | **Folder** icon | Opens the intgegrated file browser. Visible only when the [file manager](#web-file-manager) is enabled. |
+| **Terminal** icon | Opens the integrated terminal. Visibile only when the [terminal](#web-terminal) is enabled. |
 | **Clipboard** text box| Mirrors the application’s clipboard. Any text typed or pasted here is sent to the application, and text copied inside the application automatically appears here. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
 | **Clear** button | Clears the clipboard. Hidden when [automatic clipboard synchronization](#automatic-clipboard-sync) is active. |
 | **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
@@ -660,6 +661,9 @@ the first time clipboard access is requested.
 > [control panel](#web-control-panel), which provides manual clipboard access
 > between the host and the container.
 
+> [!NOTE]
+> This feature is not available to VNC clients.
+
 ## Web Audio
 
 The container supports streaming audio from the application, played through the
@@ -678,6 +682,9 @@ configuring environment variables.
 
 Control of the audio stream (mute, unmute and volume) is done via the
 [control panel](#web-control-panel).
+
+> [!NOTE]
+> This feature is not available to VNC clients.
 
 ## Web File Manager
 
@@ -702,6 +709,9 @@ The `WEB_FILE_MANAGER_DENIED_PATHS` environment variable defines which paths are
 explicitly denied access by the file manager. A denied path takes precedence
 over an allowed one.
 
+> [!NOTE]
+> This feature is not available to VNC clients.
+
 ## Web Notifications
 
 The container includes support for notifications sent through the web browser.
@@ -716,6 +726,30 @@ configuring environment variables.
 > Web browsers only allow notifications in secure contexts (HTTPS). This means
 > the container must be configured with secure web access. See
 > [Security](#security) for details.
+
+> [!NOTE]
+> This feature is not available to VNC clients.
+
+### Web Terminal
+
+The container includes a web-based terminal, allowing users to easily obtain
+shell access to the running container through a web browser.
+
+Enable the web terminal by setting `WEB_TERMINAL` to `1`. See the
+[Environment Variables](#environment-variables) section for details on
+configuring environment variables.
+
+> [!IMPORTANT]
+> For security reasons, the shell runs as a non-privileged user. As a result,
+> commands that require root privileges cannot be executed.
+
+> [!IMPORTANT]
+> To prevent sensible information from leaking over the network, it is strongly
+> recommended to configure the container with secure web access. See
+> [Security](#security) for details.
+
+> [!NOTE]
+> This feature is not available to VNC clients.
 
 ## GPU Acceleration Support
 
