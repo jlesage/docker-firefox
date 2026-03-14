@@ -458,6 +458,12 @@ certificates.
 > Certificate files are monitored, and relevant services are restarted when
 > changes are detected.
 
+> [!NOTE]
+> When the container generates its own self-signed certificate, the Common Name
+> (CN) and Subject Alternative Name (SAN) are set to the container's hostname.
+> To specify the hostname, use the `--hostname` parameter when creating the
+> container with `docker run`.
+
 ### VNC Password
 
 To restrict access to your application, set a password using one of two methods:
