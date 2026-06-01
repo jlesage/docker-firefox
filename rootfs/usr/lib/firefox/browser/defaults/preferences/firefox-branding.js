@@ -10,3 +10,5 @@ pref("browser.tabs.closeWindowWithLastTab", false);
 // Disable confirmation before quitting with Ctrl+Q.  Needed to allow Firefox
 // to quit cleanly when container is shutted down.
 pref("browser.warnOnQuitShortcut", false);
+// Enable custom userChrome.css (allows hiding UI elements like the 3-dot menu)
+pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);

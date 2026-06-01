@@ -84,6 +84,9 @@ RUN \
     APP_ICON_URL=https://github.com/jlesage/docker-templates/raw/master/jlesage/images/firefox-icon.png && \
     install_app_icon.sh "$APP_ICON_URL"
 
+# Hide the container's web control panel (left-side three-dot tab)
+RUN echo '#!/bin/sh\nINDEX="/usr/local/lib/novnc/index.html"\nif [ -f "$INDEX" ]; then sed -i "s|</head>|<style>#noVNC_control_panel, .noVNC_control_panel, [class*=\"control-panel\"] { display: none !important; }</style>\n</head>|" "$INDEX"; fi' > /etc/cont-init.d/99-hide-control-panel && chmod +x /etc/cont-init.d/99-hide-control-panel
+
 # Add files.
 COPY rootfs/ /
 COPY --from=membarrier /tmp/membarrier_check /usr/bin/
@@ -98,7 +101,7 @@ RUN \
 # Set public environment variables.
 ENV \
     FF_OPEN_URL= \
-    FF_KIOSK=0 \
+    FF_KIOSK=1 \
     FF_CUSTOM_ARGS=
 
 # Metadata.
