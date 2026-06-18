@@ -5,6 +5,7 @@
   ],
   "minimumReleaseAge": "3 days",
   "internalChecksFilter": "strict",
+  "automerge": true,
   "packageRules": [
     {
       "matchDatasources": [
