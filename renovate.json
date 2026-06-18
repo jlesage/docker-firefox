@@ -4,6 +4,7 @@
     "config:recommended"
   ],
   "dependencyDashboard": true,
+  "minimumReleaseAge": "3 days",
   "packageRules": [
     {
       "matchDatasources": [
