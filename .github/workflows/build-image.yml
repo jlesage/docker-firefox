@@ -48,7 +48,7 @@ jobs:
             VERSION=${GITHUB_REF#refs/tags/}
           elif [[ $GITHUB_REF =~ refs/heads/* ]]; then
             # Git commit pushed: use the commit SHA as the version.
-            VERSION=${{ steps.get-latest-tag.outputs.tag }}-$(printf '%(%Y%m%d%H%M%S)T\n' -1)
+            VERSION=$(echo ${{ steps.get-latest-tag.outputs.tag }}| cut -d- -f1)-$(printf '%(%Y%m%d%H%M%S)T\n' -1)
           elif [[ $GITHUB_REF =~ refs/pull/* ]]; then
             # Pull request: use PR number as the version.
             VERSION=pr-${{ github.event.number }}
