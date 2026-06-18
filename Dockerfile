@@ -1,11 +1,11 @@
 #
 # firefox Dockerfile
 #
-# https://github.com/jlesage/docker-firefox
+# https://github.com/jneisener/docker-firefox
 #
 
 # Build the membarrier check tool.
-FROM alpine:3.14 AS membarrier
+FROM alpine:3.23 AS membarrier
 WORKDIR /tmp
 COPY membarrier_check.c .
 RUN apk --no-cache add build-base linux-headers
@@ -13,12 +13,13 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.23-v4.11.3
+FROM jlesage/baseimage-gui:alpine-3.23-v4.11.3@sha256:f1cf015644bf878de64ef81a2aef37b595bfdec7c2e4090cb79f838d9f322899
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
+# renovate: datasource=repology depName=alpine_3_23/firefox versioning=loose
 ARG FIREFOX_VERSION=145.0-r0
 #ARG PROFILE_CLEANER_VERSION=2.36
 
@@ -33,7 +34,7 @@ RUN \
 #    add-pkg --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
 #            --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 #            --upgrade firefox=${FIREFOX_VERSION}
-     add-pkg firefox=${FIREFOX_VERSION}
+     add-pkg firefox=${FIREFOX_VERSION:?}
 
 # Install extra packages.
 RUN \
@@ -81,7 +82,7 @@ RUN \
 
 # Generate and install favicons.
 RUN \
-    APP_ICON_URL=https://github.com/jlesage/docker-templates/raw/master/jlesage/images/firefox-icon.png && \
+    APP_ICON_URL=https://github.com/jneisener/docker-templates/raw/master/jneisener/images/firefox-icon.png && \
     install_app_icon.sh "$APP_ICON_URL"
 
 # Add files.
@@ -106,5 +107,5 @@ LABEL \
       org.label-schema.name="firefox" \
       org.label-schema.description="Docker container for Firefox" \
       org.label-schema.version="${DOCKER_IMAGE_VERSION:-unknown}" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-firefox" \
+      org.label-schema.vcs-url="https://github.com/jneisener/docker-firefox" \
       org.label-schema.schema-version="1.0"
