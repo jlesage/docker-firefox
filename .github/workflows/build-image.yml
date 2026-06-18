@@ -64,7 +64,7 @@ jobs:
           fi
           # Determine the Docker container tags.
           TAGS="${{ env.DOCKER_IMAGE_NAME }}:${VERSION}"
-          if [[ $GITHUB_REF =~ refs/tags/* ]]; then
+          if [[ $GITHUB_REF =~ refs/heads/* ]]; then
             TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
           fi
           TAGS="$TAGS,$(echo $TAGS | tr ',' '\n' | sed 's|^|ghcr.io/|' | tr '\n' ',')"
