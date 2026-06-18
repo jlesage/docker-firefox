@@ -1,4 +1,5 @@
 name: Docker image CI/CD
+permissions: write-all
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
