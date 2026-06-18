@@ -4,6 +4,7 @@
     "config:recommended"
   ],
   "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
   "packageRules": [
     {
       "matchDatasources": [
