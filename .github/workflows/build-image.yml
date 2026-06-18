@@ -144,3 +144,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: ${{ env.DOCKER_IMAGE_NAME }}
           readme-filepath: DOCKERHUB.md
+
+      - name: Release
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
+        if: ${{ steps.prep.outputs.is_release == 'yes' }}
