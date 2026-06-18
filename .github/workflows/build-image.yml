@@ -1,4 +1,5 @@
 name: Docker image CI/CD
+permissions: write-all
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,16 +23,20 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Free disk space
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          tool-cache: true
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: false
+#      - name: Free disk space
+#        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+#        with:
+#          tool-cache: true
+#          android: true
+#          dotnet: true
+#          haskell: true
+#          large-packages: true
+#          docker-images: true
+#          swap-storage: false
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - uses: actions-ecosystem/action-get-latest-tag@b7c32daec3395a9616f88548363a42652b22d435
+        id: get-latest-tag
 
       - name: Prepare
         id: prep
@@ -43,7 +48,7 @@ jobs:
             VERSION=${GITHUB_REF#refs/tags/}
           elif [[ $GITHUB_REF =~ refs/heads/* ]]; then
             # Git commit pushed: use the commit SHA as the version.
-            VERSION=${GITHUB_SHA::8}
+            VERSION=${{ steps.get-latest-tag.outputs.tag }}-$(printf '%(%Y%m%d%H%M%S)T\n' -1)
           elif [[ $GITHUB_REF =~ refs/pull/* ]]; then
             # Pull request: use PR number as the version.
             VERSION=pr-${{ github.event.number }}
@@ -63,30 +68,14 @@ jobs:
             TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
           fi
           TAGS="$TAGS,$(echo $TAGS | tr ',' '\n' | sed 's|^|ghcr.io/|' | tr '\n' ',')"
-          # Determine the release type.
-          if [[ $GITHUB_REF =~ refs/tags/* ]]; then
-              IS_RELEASE=yes
-              if [[ $GITHUB_REF =~ -pre\.[0-9]+ ]]; then
-                  RELEASE_TYPE="pre"
-              else
-                  RELEASE_TYPE="standard"
-              fi
-          else
-              IS_RELEASE=no
-              RELEASE_TYPE="n/a"
-          fi
           # Print results.
           echo "::group::Results"
           echo "Github reference: $GITHUB_REF"
-          echo "Release: $IS_RELEASE"
-          echo "Release type: $RELEASE_TYPE"
           echo "Docker container version: $VERSION"
           echo "Docker container version label: $LABEL_VERSION"
           echo "Docker container tag(s): $TAGS"
           echo "::endgroup::"
           # Export outputs.
-          echo "is_release=${IS_RELEASE}" >> $GITHUB_OUTPUT
-          echo "release_type=${RELEASE_TYPE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "label_version=${LABEL_VERSION}" >> $GITHUB_OUTPUT
           echo "tags=${TAGS}" >> $GITHUB_OUTPUT
@@ -101,14 +90,14 @@ jobs:
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
 
       - name: Login to DockerHub
-        if: ${{ steps.prep.outputs.is_release == 'yes' }}
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Login to GitHub Container Registry
-        if: ${{ steps.prep.outputs.is_release == 'yes' }}
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
         with:
           registry: ghcr.io
@@ -118,7 +107,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8
         with:
-          push: ${{ steps.prep.outputs.is_release == 'yes' }}
+          push: ${{ github.event_name != 'pull_request' }}
           provenance: false
           platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.prep.outputs.tags }}
@@ -127,17 +116,18 @@ jobs:
           cache-from: type=gha,scope=${{ env.DOCKER_IMAGE_NAME }}
           cache-to: type=gha,mode=max,scope=${{ env.DOCKER_IMAGE_NAME }}
 
+      - uses: actions-ecosystem/action-push-tag@6e82caefe706f5a729e354df7443dc82f98a414f
+        if: github.event_name != 'pull_request'
+        with:
+          tag: ${{ steps.prep.outputs.version }}
+
       - name: Inspect
-        if: ${{ steps.prep.outputs.is_release == 'yes' }}
+        if: github.event_name != 'pull_request'
         run: |
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_NAME }}:${{ steps.prep.outputs.version }}
 
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
-        if: ${{ steps.prep.outputs.release_type == 'standard' }}
-
       - name: Dockerhub description
-        if: ${{ steps.prep.outputs.release_type == 'standard' }}
+        if: github.event_name != 'pull_request'
         uses: peter-evans/dockerhub-description@432a30c9e07499fd01da9f8a49f0faf9e0ca5b77
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -147,4 +137,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
-        if: ${{ steps.prep.outputs.is_release == 'yes' }}
+        if: github.event_name != 'pull_request'
+        with:
+          generate_release_notes: true
+          tag_name: ${{ steps.prep.outputs.version }} 
