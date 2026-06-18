@@ -1,4 +1,4 @@
-All credit goes to https://github.com/jlesage/docker-firefox, only goal of this fork is to implement automatic versions upgrades
+All credit goes to https://github.com/jlesage/docker-firefox, only goal of this fork is to implement automatic version upgrades.
 
 
 # Docker container for Firefox
