@@ -1,9 +1,12 @@
+All credit goes to https://github.com/jlesage/docker-firefox, only goal of this fork is to implement automatic versions upgrades
+
+
 # Docker container for Firefox
-[![Release](https://img.shields.io/github/release/jlesage/docker-firefox.svg?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-firefox/releases/latest)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/firefox/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/firefox/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jlesage/firefox?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/firefox)
-[![Docker Stars](https://img.shields.io/docker/stars/jlesage/firefox?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/firefox)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jlesage/docker-firefox/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jlesage/docker-firefox/actions/workflows/build-image.yml)
+[![Release](https://img.shields.io/github/release/jneisener/docker-firefox.svg?logo=github&style=for-the-badge)](https://github.com/jneisener/docker-firefox/releases/latest)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jneisener/firefox/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jneisener/firefox/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/jneisener/firefox?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jneisener/firefox)
+[![Docker Stars](https://img.shields.io/docker/stars/jneisener/firefox?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jneisener/firefox)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/jneisener/docker-firefox/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jneisener/docker-firefox/actions/workflows/build-image.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/JocelynLeSage)
 
 This project provides a lightweight and secure Docker container for
@@ -23,7 +26,7 @@ shell, desktop notifications, and more.
 
 ---
 
-[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/firefox-icon.png&w=110)](https://www.mozilla.org/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/firefox/)
+[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jneisener/docker-templates/master/jneisener/images/firefox-icon.png&w=110)](https://www.mozilla.org/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/firefox/)
 
 Mozilla Firefox is a free and open-source web browser developed by Mozilla
 Foundation and its subsidiary, Mozilla Corporation.
@@ -82,7 +85,7 @@ docker run -d \
     --name=firefox \
     -p 5800:5800 \
     -v /docker/appdata/firefox:/config:rw \
-    jlesage/firefox
+    jneisener/firefox
 ```
 
 Where:
@@ -99,7 +102,7 @@ docker run [-d] \
     [-e <VARIABLE_NAME>=<VALUE>]... \
     [-v <HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]]... \
     [-p <HOST_PORT>:<CONTAINER_PORT>]... \
-    jlesage/firefox
+    jneisener/firefox
 ```
 
 | Parameter | Description |
@@ -250,7 +253,7 @@ included in this example.
 ```yaml
 services:
   firefox:
-    image: jlesage/firefox
+    image: jneisener/firefox
     ports:
       - "5800:5800"
     volumes:
@@ -274,8 +277,8 @@ where:
 View all available tags on [Docker Hub] or check the [Releases] page for version
 details.
 
-[Releases]: https://github.com/jlesage/docker-firefox/releases
-[Docker Hub]: https://hub.docker.com/r/jlesage/firefox/tags
+[Releases]: https://github.com/jneisener/docker-firefox/releases
+[Docker Hub]: https://hub.docker.com/r/jneisener/firefox/tags
 
 ## Docker Image Update
 
@@ -294,7 +297,7 @@ To manually update the Docker image, follow these steps:
 
   1. Fetch the latest image:
 ```shell
-docker pull jlesage/firefox
+docker pull jneisener/firefox
 ```
 
   2. Stop the container:
@@ -318,7 +321,7 @@ For Synology NAS users, follow these steps to update a container image:
 
   1.  Open the *Docker* application.
   2.  Click *Registry* in the left pane.
-  3.  In the search bar, type the name of the container (`jlesage/firefox`).
+  3.  In the search bar, type the name of the container (`jneisener/firefox`).
   4.  Select the image, click *Download*, and choose the `latest` tag.
   5.  Wait for the download to complete. A notification will appear once done.
   6.  Click *Container* in the left pane.
@@ -431,7 +434,7 @@ ReadExact: Socket error while reading
 
 For convenience, an unofficial, working version is provided here:
 
-https://github.com/jlesage/docker-baseimage-gui/raw/master/tools/ssvnc_windows_only-1.0.30-r1.zip
+https://github.com/jneisener/docker-baseimage-gui/raw/master/tools/ssvnc_windows_only-1.0.30-r1.zip
 
 This version upgrades the bundled `stunnel` to version `5.49`, resolving the
 connection issues.
@@ -632,7 +635,7 @@ The control panel is available whenever the application GUI is accessed through
 a web browser. Click the small three-dots tab on the left edge of the browser
 window to open it.
 
-![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/control-panel.png&w=500)
+![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jneisener/docker-templates/master/jneisener/images/control-panel.png&w=500)
 
 | Control | Action / Purpose |
 |---------|------------------|
@@ -864,6 +867,6 @@ If Firefox is crashing frequently, make sure that:
 ## Support or Contact
 
 Having troubles with the container or have questions? Please
-[create a new issue](https://github.com/jlesage/docker-firefox/issues).
+[create a new issue](https://github.com/jneisener/docker-firefox/issues).
 
-For other Dockerized applications, visit https://jlesage.github.io/docker-apps.
+For other Dockerized applications, visit https://jneisener.github.io/docker-apps.
