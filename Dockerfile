@@ -82,7 +82,7 @@ RUN \
 
 # Generate and install favicons.
 RUN \
-    APP_ICON_URL=https://github.com/jneisener/docker-templates/raw/master/jneisener/images/firefox-icon.png && \
+    APP_ICON_URL=https://github.com/jlesage/docker-templates/raw/master/jlesage/images/firefox-icon.png && \
     install_app_icon.sh "$APP_ICON_URL"
 
 # Add files.

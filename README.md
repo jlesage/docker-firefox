@@ -26,7 +26,7 @@ shell, desktop notifications, and more.
 
 ---
 
-[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jneisener/docker-templates/master/jneisener/images/firefox-icon.png&w=110)](https://www.mozilla.org/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/firefox/)
+[![Firefox logo](https://images.weserv.nl/?url=raw.githubusercontent.com/jneisener/docker-templates/master/jlesage/images/firefox-icon.png&w=110)](https://www.mozilla.org/firefox/)[![Firefox](https://images.placeholders.dev/?width=224&height=110&fontFamily=monospace&fontWeight=400&fontSize=52&text=Firefox&bgColor=rgba(0,0,0,0.0)&textColor=rgba(121,121,121,1))](https://www.mozilla.org/firefox/)
 
 Mozilla Firefox is a free and open-source web browser developed by Mozilla
 Foundation and its subsidiary, Mozilla Corporation.
@@ -635,7 +635,7 @@ The control panel is available whenever the application GUI is accessed through
 a web browser. Click the small three-dots tab on the left edge of the browser
 window to open it.
 
-![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jneisener/docker-templates/master/jneisener/images/control-panel.png&w=500)
+![Web Control Panel](https://images.weserv.nl/?url=raw.githubusercontent.com/jlesage/docker-templates/master/jlesage/images/control-panel.png&w=500)
 
 | Control | Action / Purpose |
 |---------|------------------|
