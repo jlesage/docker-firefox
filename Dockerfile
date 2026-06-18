@@ -20,7 +20,7 @@ ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
 # renovate: datasource=repology depName=alpine_3_23/firefox versioning=loose
-ARG FIREFOX_VERSION=145.0-r0
+ARG FIREFOX_VERSION=151.0.3-r0
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
