@@ -30,6 +30,16 @@
       "depNameTemplate": "docker.io/library/alpine",
       "versioningTemplate": "regex:^(?<major>\\d+)[._](?<minor>\\d+)$",
       "autoReplaceStringTemplate": "# renovate: datasource=repology depName=alpine_{{{newMajor}}}_{{{newMinor}}}"
+    },
+    {
+      "description": "Update FIREFOX_VERSION variable in Dockerfiles",
+      "fileMatch": [
+        "Dockerfile"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: versioning=(?<versioning>[a-z-]+?)\\nARG FIREFOX_VERSION=(?<currentValue>.+?))"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     }
   ]
 }
