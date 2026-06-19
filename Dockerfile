@@ -5,7 +5,7 @@
 #
 
 # Build the membarrier check tool.
-FROM docker.io/library/alpine:3.23 AS membarrier
+FROM docker.io/library/alpine:3.24 AS membarrier
 WORKDIR /tmp
 COPY membarrier_check.c .
 RUN apk --no-cache add build-base linux-headers
@@ -19,7 +19,7 @@ FROM jlesage/baseimage-gui:alpine-3.23-v4.12.4@sha256:3609f0e437ec81fa7d0e2805e6
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-# renovate: datasource=repology depName=alpine_3_23/firefox versioning=loose
+# renovate: datasource=repology depName=alpine_3_24/firefox versioning=loose
 ARG FIREFOX_VERSION=151.0.3-r0
 #ARG PROFILE_CLEANER_VERSION=2.36
 
