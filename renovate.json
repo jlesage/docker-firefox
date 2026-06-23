@@ -17,12 +17,14 @@
       ],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
       "versioning": "semver",
+      "prCreation": "immediate",
       "minimumReleaseAge": null
     },
     {
       "matchDatasources": [
         "repology"
       ],
+      "prCreation": "immediate",
       "minimumReleaseAge": null
     }
   ],
