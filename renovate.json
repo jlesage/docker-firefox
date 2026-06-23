@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended"
   ],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "10 days",
   "prCreation": "not-pending",
   "internalChecksFilter": "strict",
   "automerge": true,
@@ -16,7 +16,14 @@
         "jlesage/*"
       ],
       "versionCompatibility": "^(?<compatibility>.*)-(?<version>.*)$",
-      "versioning": "semver"
+      "versioning": "semver",
+      "minimumReleaseAge": null
+    },
+    {
+      "matchDatasources": [
+        "repology"
+      ],
+      "minimumReleaseAge": null
     }
   ],
   "customManagers": [
