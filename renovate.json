@@ -43,7 +43,7 @@
       "customType": "regex",
       "description": "Update FIREFOX_VERSION variable in Dockerfiles",
       "managerFilePatterns": ["/Dockerfile/"],
-      "matchStrings": ["# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: versioning=(?<versioning>[a-z-]+?)\\nARG FIREFOX_VERSION=(?<currentValue>.+?))"],
+      "matchStrings": ["# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: versioning=(?<versioning>[a-z-]+?)\\nARG FIREFOX_VERSION=(?<currentValue>.+$?))"],
       "versioningTemplate": "{{#if versioning}}{{versioning}}{{else}}semver{{/if}}"
     }
   ]
