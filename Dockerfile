@@ -13,13 +13,13 @@ RUN gcc -static -o membarrier_check membarrier_check.c
 RUN strip membarrier_check
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.23-v4.12.5
+FROM jlesage/baseimage-gui:alpine-3.24-v4.12.5
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG FIREFOX_VERSION=145.0-r0
+ARG FIREFOX_VERSION=151.0.3-r0
 #ARG PROFILE_CLEANER_VERSION=2.36
 
 # Define software download URLs.
