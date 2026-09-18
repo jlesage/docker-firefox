@@ -40,7 +40,7 @@ RUN xx-verify \
     /tmp/nspr-install/usr/lib/libplds4.so
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.24-v4.13.2
+FROM jlesage/baseimage-gui:alpine-3.24-v4.14.0
 
 ARG FIREFOX_VERSION
 ARG DOCKER_IMAGE_VERSION
