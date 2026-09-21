@@ -664,7 +664,7 @@ window to open it.
 | **Fullscreen** icon | Toggle fullscreen mode for the browser window. |
 | **Hand** icon| Allows dragging/moving the application window. Visible only when **Scaling Mode** is *None* and **Clip to Window** is enabled.
 | **Folder** icon | Opens the integrated file browser. Visible only when the [file manager](#web-file-manager) is enabled. |
-| **Terminal** icon | Opens the integrated terminal. Visibile only when the [terminal](#web-terminal) is enabled. |
+| **Terminal** icon | Opens the integrated terminal. Visible only when the [terminal](#web-terminal) is enabled. |
 | **Clipboard** text box| Mirrors the application’s clipboard. Any text typed or pasted here is sent to the application, and text copied inside the application automatically appears here. Hidden when [host clipboard sync](#host-clipboard-sync) is active. |
 | **Clear** button | Clears the clipboard. Hidden when [host clipboard sync](#host-clipboard-sync) is active. |
 | **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
@@ -830,7 +830,7 @@ Docker uses [seccomp profile] to restrict system calls available to the
 container. Before Docker version `20.10.0`, the `membarrier` system call was
 not allowed in the default profile. If you run a such version, you can use one
 of the following solutions, from the most to the least secure, to provide the
-container permission to use this sytem call:
+container permission to use this system call:
 
   1. Run the container with a custom seccomp profile allowing the `membarrier`
      system call. The [latest official seccomp profile] can be used. Download
