@@ -33,7 +33,7 @@ app:
           container. Before Docker version `20.10.0`, the `membarrier` system call was
           not allowed in the default profile. If you run a such version, you can use one
           of the following solutions, from the most to the least secure, to provide the
-          container permission to use this sytem call:
+          container permission to use this system call:
 
             1. Run the container with a custom seccomp profile allowing the `membarrier`
                system call. The [latest official seccomp profile] can be used. Download
