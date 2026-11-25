@@ -96,6 +96,20 @@ app:
               for more details.
             - Make sure the kernel of your Linux distribution is up-to-date.
   changelog:
+    - version: 26.11.2
+      date: 2026-11-25
+      changes:
+        - 'Updated baseimage to version 4.15.0, which brings the following changes:'
+        - '2:Added web microphone support.'
+        - '2:Added H.264 encoding support for a moving screen in the web interface.'
+        - '2:Web audio sample rate is now 48000 Hz.'
+        - '2:Web audio now skips near-silence.'
+        - '2:The web interface now shows the browser''s own mouse pointer.'
+        - '2:Improved responsiveness of screen updates in the web interface.'
+        - '2:Fixed one-pixel border showing above the main application window.'
+        - '2:Fixed main window un-maximizing on Alt+drag.'
+        - '2:Fixed web audio staying off after the web interface reconnects.'
+        - '2:Fixed idle JPEG refresh delaying the next interaction.'
     - version: 26.11.1
       date: 2026-11-20
       changes:
