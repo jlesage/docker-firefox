@@ -58,7 +58,9 @@ Foundation and its subsidiary, Mozilla Corporation.
       * [Routing Based on URL Path](#routing-based-on-url-path)
    * [Web Control Panel](#web-control-panel)
    * [Host Clipboard Sync](#host-clipboard-sync)
+   * [Web H.264 Encoding](#web-h264-encoding)
    * [Web Audio](#web-audio)
+   * [Web Microphone](#web-microphone)
    * [Web File Manager](#web-file-manager)
    * [Web Notifications](#web-notifications)
    * [Web Terminal](#web-terminal)
@@ -132,6 +134,7 @@ the `-e` parameter in the format `<VARIABLE_NAME>=<VALUE>`.
 |`DISPLAY_HEIGHT`| Height (in pixels) of the application's window. | `1080` |
 |`DARK_MODE`| When set to `1`, enables dark mode for the application. See Dark Mode](#dark-mode) for details. | `0` |
 |`WEB_AUDIO`| When set to `1`, enables audio support, allowing audio produced by the application to play through the browser. See [Web Audio](#web-audio) for details. | `0` |
+|`WEB_MICROPHONE`| When set to `1`, enables microphone support, allowing audio captured by the browser to be used by the application. Requires the container to be configured with secure web access (HTTPS). See [Web Microphone](#web-microphone) for details. | `0` |
 |`WEB_HOST_CLIPBOARD_SYNC`| When set to `1`, enables support for synchronizing the host system clipboard with the application inside the container. Actual availability still depends on the browser. See [Host Clipboard Sync](#host-clipboard-sync) for details. | `1` |
 |`WEB_FILE_MANAGER`| When set to `1`, enables the web file manager, allowing interaction with files inside the container through the web browser, supporting operations like renaming, deleting, uploading, and downloading. See [Web File Manager](#web-file-manager) for details. | `0` |
 |`WEB_FILE_MANAGER_ALLOWED_PATHS`| Comma-separated list of paths within the container that the file manager can access. By default, the container's entire filesystem is not accessible, and this variable specifies allowed paths. If set to `AUTO`, commonly used folders and those mapped to the container are automatically allowed. The value `ALL` allows access to all paths (no restrictions). See [Web File Manager](#web-file-manager) for details. | `AUTO` |
@@ -670,6 +673,8 @@ window to open it.
 | **Clear** button | Clears the clipboard. Hidden when [host clipboard sync](#host-clipboard-sync) is active. |
 | **Audio** icon | Mutes or unmutes audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
 | **Volume** slider| Controls the playback volume of the audio streaming from the container. Visible only when [audio support](#web-audio) is enabled. |
+| **Microphone** icon | Turns the microphone on or off. Visible only when [microphone support](#web-microphone) is enabled. |
+| **Microphone** selector | Chooses which microphone is sent to the application. Visible only when [microphone support](#web-microphone) is enabled. |
 | **Clip to Window** toggle | Only applies when **Scaling Mode** is *None*. When disabled, scrollbars appear if the application window is larger than the browser window. When enabled, no scrollbars are shown and the hand icon is used to pan. |
 | **Sync with Host Clipboard** toggle | Enables synchronization between the host system clipboard and the application. Actual availability still depends on the browser. Visible only when [host clipboard sync](#host-clipboard-sync) support is enabled. |
 | **Scaling Mode** dropdown | Controls how the application window is scaled to fit the browser. **None** – no scaling, the application window keeps its original size. **Local Scaling** – the image is scaled in the browser (application window size unchanged). **Remote Scaling** – the application window inside the container is automatically resized to match the browser window size. |
@@ -718,6 +723,19 @@ web interface settings for their own browser.
 > [!NOTE]
 > This feature is not available to VNC clients.
 
+## Web H.264 Encoding
+
+While the screen is moving, the web interface sends the picture with
+H.264 encoding, the same kind of compression used for video. Each update
+is much smaller than a JPEG image of the screen, so bandwidth use drops
+and scrolling stays smoother on a slow connection. A still screen is sent
+as a JPEG image. VNC clients do not use H.264 encoding.
+
+> [!NOTE]
+> Chrome and Firefox require a secure connection (HTTPS) to use H.264
+> encoding. See [Security](#security) for details on configuring secure
+> web access.
+
 ## Web Audio
 
 The container supports streaming audio from the application, played through the
@@ -736,6 +754,33 @@ configuring environment variables.
 
 Control of the audio stream (mute, unmute and volume) is done via the
 [control panel](#web-control-panel).
+
+> [!NOTE]
+> This feature is not available to VNC clients.
+
+## Web Microphone
+
+The container can use the microphone on the computer running the web browser.
+The application records it like any other microphone, under the name **Remote
+Microphone**.
+
+Audio is provided with the following specification:
+
+  * Raw PCM format
+  * 1 channel
+  * 16-bit sample depth
+  * 48kHz sample rate
+
+Enable the microphone by setting `WEB_MICROPHONE` to `1`. See the
+[Environment Variables](#environment-variables) section for details on
+configuring environment variables.
+
+The microphone is turned on from the [control panel](#web-control-panel).
+
+> [!IMPORTANT]
+> Web browsers only allow microphone access in secure contexts (HTTPS). This means
+> the container must be configured with secure web access. See
+> [Security](#security) for details.
 
 > [!NOTE]
 > This feature is not available to VNC clients.
